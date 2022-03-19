@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+
+<div class="home-container">
+
+    <div>
+        <h3>Browse Senders</h3>
+        <hr>
+
+        <div>
+            <a href="{% url 'home' %}">All</a>
+        </div>
+
+        {% for message in messages %}
+        <div>
+            <a href="{% url 'home' %}?q={{message.sender.username}}">{{message.sender.username}}</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div>
+        <h5>{{message_count}} messages available</h5>
+        <a href="{% url 'create-message' %}"> Create Message</a>
+    <div>
+        {% for message in messages %}
+            <div>
+                <p>{{message.sender.username}}</p>
+                {% if request.user == message.recipient %}
+                <span>@{{message.sender.username}}</span>
+                <h5>{{message.id}} -- <a href="{% url 'message' message.id %}">{{message.body}}</a></h5>
+                {% endif %}
+                <hr>
+            </div>
+
+        {% endfor %}
+    </div>
+
+    </div>
+</div>
+
+{% endblock content %}
