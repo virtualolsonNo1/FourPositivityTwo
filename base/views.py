@@ -76,7 +76,16 @@ def home(request):
         )
     message_count = messages_to.count()
 
-    context = {'message_count': message_count, 'messages': messages_to}
+    unique_senders = user.receiver.all()
+    senders = []
+    for message in unique_senders:
+        if message.sender not in senders:
+            senders.append(message.sender)
+
+    print(unique_senders)
+    print(senders)
+
+    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders}
     return render(request, 'base/home.html', context)
 
 def message(request, pk):
