@@ -100,7 +100,9 @@ def createMessage(request):
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit = False)
+            obj.sender = request.user
+            obj.save()
             return redirect('home')
     context = {'form': form}
     return render(request, 'base/message_form.html', context)
