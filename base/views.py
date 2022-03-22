@@ -1,3 +1,4 @@
+from django.dispatch import receiver
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
@@ -62,14 +63,17 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
-    print(request.user.username)
     if(request.user.username is not ''):
         user = User.objects.get(username=request.user.username)
     else:
         context = {}
         return render(request, 'base/home.html', context)
-    messages_to = user.receiver.all()
 
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    messages_to = user.receiver.all()
+    messages_to = messages_to.filter(
+        Q(sender__id__icontains=q)
+        )
     message_count = messages_to.count()
 
     context = {'message_count': message_count, 'messages': messages_to}

@@ -21,7 +21,9 @@
 
         {% for message in messages %}
         <div>
-            <a href="{% url 'home' %}?q={{message.sender.username}}">{{message.sender.username}}</a>
+            <!-- NEED TO USE LOGIC HERE TO MAKE IT SO ONLY UNIQUE NAMES APPEAR AND THAT THEY LINK TO "CONVERSATION" PAGE OF SORTS -->
+            <!-- AND CORRECT URL!!!!!!!!!!!!!!!!!!!!!!!!! -->
+            <a href="{% url 'home' %}?q={{message.sender.id}}">{{message.sender.username}}</a>
         </div>
         {% endfor %}
     </div>
