@@ -10,8 +10,10 @@
 </style>
 
 <div class="home-container">
-
     <div>
+        <form method="GET" action="{% url 'home' %}">
+            <input type="text" name="q" placeholder="Search Messages By User..."/>
+        </form>
         <h3>Browse Senders</h3>
         <hr>
 
