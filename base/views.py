@@ -71,8 +71,8 @@ def home(request):
 
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     messages_to = user.receiver.all()
-    messages_to = messages_to.filter(
-        Q(sender__id__icontains=q)
+    messages_to = messages_to.filter( 
+        Q(sender__username__icontains=q)
         )
     message_count = messages_to.count()
 

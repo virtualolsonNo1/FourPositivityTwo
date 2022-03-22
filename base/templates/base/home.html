@@ -23,7 +23,7 @@
         <div>
             <!-- NEED TO USE LOGIC HERE TO MAKE IT SO ONLY UNIQUE NAMES APPEAR AND THAT THEY LINK TO "CONVERSATION" PAGE OF SORTS -->
             <!-- AND CORRECT URL!!!!!!!!!!!!!!!!!!!!!!!!! -->
-            <a href="{% url 'home' %}?q={{sender.id}}">{{sender.username}}</a>
+            <a href="{% url 'home' %}?q={{sender.username}}">{{sender.username}}</a>
         </div>
         {% endfor %}
     </div>
