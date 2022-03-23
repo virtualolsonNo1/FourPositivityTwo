@@ -155,7 +155,14 @@
                 <p>{{message.sender.username}}</p>
                 {% if request.user == message.recipient %}
                 <span>@{{message.sender.username}}</span>
-                <h5>{{message.id}} -- <a href="{% url 'message' message.id %}">{{message.body}}</a></h5>
+                <h5>{{message.id}} -- <a href="{% url 'message' message.id %}">{{message.body}}
+                      <ul class="messages">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul> 
+                </a></h5>
+
                 {% endif %}
                 <hr>
             </div>

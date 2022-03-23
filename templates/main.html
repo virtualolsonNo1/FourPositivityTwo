@@ -1,27 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset = 'utf-8'>
-        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-        <title>4Positivity</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- <link rel='stylesheet', type='text/css' media='screen' href='main.css'> -->
-    </head>
 
-    <body>
-        {% include 'navbar.html' %}
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>4Positivity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel='stylesheet', type='text/css' media='screen' href='main.css'> -->
+</head>
 
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        
-        {% block content %}
+<body>
+    {% include 'navbar.html' %} {% if messages %}
+    <!-- this is the messages stuff -->
+    <!-- <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul> -->
+    {% endif %} {% block content %} {% endblock %}
 
-        {% endblock %}
+</body>
 
-    </body>
 </html>
