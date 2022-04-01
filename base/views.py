@@ -120,3 +120,18 @@ def createMessage(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'base/message_form.html', context)
+
+@login_required(login_url='login')
+def store(request):
+    context = {'storeItems': "buy some pizza"}
+    return render(request, 'base/store.html', context)
+
+@login_required(login_url='login')
+def profile(request):
+    context = {'name': "joe bob"}
+    return render(request, 'base/profile.html', context)
+
+@login_required(login_url='login')
+def leaderboard(request):
+    context = {'topSender': "Top sender: joe bob"}
+    return render(request, 'base/leaderboard.html', context)

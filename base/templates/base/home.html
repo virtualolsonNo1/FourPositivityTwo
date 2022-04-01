@@ -122,9 +122,9 @@
     </div>
 </div>
 <div class="navbar">
-    <a href="#">Profile</a>
-    <a href="#">Store</a>
-    <a href="#">Leaderboard</a>
+    <a href="{% url 'profile' %}">Profile</a>
+    <a href="{% url 'store' %}">Store</a>
+    <a href="{% url 'leaderboard' %}">Leaderboard</a>
     <a href="{% url 'create-message' %}"> Create Message</a>
     <a href="#" class="right">
         <form method="GET" action="{% url 'home' %}">
