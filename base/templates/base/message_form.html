@@ -4,9 +4,10 @@
 </div>
 <div>
     <form method="POST" action="">
-        {% csrf_token %} {{form.as_p}}
+        {% csrf_token %} {{form.as_p}}  
         <input type="submit" value="Send" style="color: white; border-radius: 12px; background-color: #E98D20;" />
     </form>
+    <p style="color:black;"> Copy and paste Emojis to send points to your friends!<br>10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟<br>20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫<br>50 Points: 💎👑💛<br>100 Points: 💯 </p>
 </div>
 
 {% endblock content %}

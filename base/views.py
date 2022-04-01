@@ -9,14 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .forms import MessageForm
 from .models import Message
-
-# Create your views here.
-
-# rooms = [
-#     {'id':1, 'name':'Lets learn python!'},
-#     {'id':2, 'name':'Design with me'},
-#     {'id':3, 'name':'Frontend developers'},
-# ]
+# 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
+# 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
+# 50 Points: 💎👑💛
+# 100 Points: 💯
+EMOJIS = {"😊":10,"👏" : 10, "🤩" : 10,"❤️": 10, "🌈" : 10, "🙌":10,"🌟":10,"💫":20, 
+"🥰":10,"🏅":20,"🎈":20,"💖":20,"👑":50,"🐶":20,"💛" : 50,"✨":20,
+"🐱":20,"🐸":20,"🌹":20,"🌻":10,"☀️":10,"🍨":20,"🍕":20,"💎":50,"💯":100}
 
 def loginPage(request):
     page = 'login'
@@ -88,6 +87,16 @@ def home(request):
     context = {'message_count': message_count, 'messages': messages_to, 'senders': senders}
     return render(request, 'base/home.html', context)
 
+def getPoints(message):
+    print(message)
+    chars = list(message)
+    pointTotal = 0
+    for char in chars:
+        if char in EMOJIS.keys():
+            pointTotal += EMOJIS[char]
+            print(char + " : pointTotal " + str(pointTotal))
+    return pointTotal
+
 def message(request, pk):
     message = Message.objects.get(id=pk)
     context = {'message': message}
@@ -96,12 +105,17 @@ def message(request, pk):
 @login_required(login_url='login')
 def createMessage(request):
     form = MessageForm()
-
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
             obj = form.save(commit = False)
             obj.sender = request.user
+            # get points for emojis in the message
+            pointTotal = getPoints(obj.body)
+            obj.pointTotal = pointTotal
+
+            # decrement sender points and increment reciever points
+            
             obj.save()
             return redirect('home')
     context = {'form': form}
