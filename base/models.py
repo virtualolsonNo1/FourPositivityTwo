@@ -17,3 +17,17 @@ class Message(models.Model):
 
     def __str__(self):
         return self.body[0:50]
+
+class Profile(models.Model):
+    #profilePic?????
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    pointsToSend = models.IntegerField(default=100)
+    pointsReceived = models.IntegerField(default=0)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created']
+
+    def __str__(self):
+        return str(self.user)

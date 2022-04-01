@@ -6,9 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from .forms import CreateUserForm
 from .forms import MessageForm
 from .models import Message
+from .models import Profile
 # 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
 # 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
 # 50 Points: 💎👑💛
@@ -46,14 +47,18 @@ def logoutUser(request):
     return redirect('home')
 
 def registerPage(request):
-    form = UserCreationForm()
+    form = CreateUserForm()
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
+            user.email = user.email.lower()
             user.save()
+            Profile.objects.create(
+                user=user,
+            )
             login(request, user)
             return redirect('home')
         else:
@@ -68,6 +73,13 @@ def home(request):
         context = {}
         return render(request, 'base/home.html', context)
 
+    profiles = Profile.objects.all()
+    for profile in profiles:
+        if profile.user == request.user:
+            print(profile.pointsToSend)
+
+
+
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     messages_to = user.receiver.all()
     messages_to = messages_to.filter( 
@@ -80,9 +92,6 @@ def home(request):
     for message in unique_senders:
         if message.sender not in senders:
             senders.append(message.sender)
-
-    print(unique_senders)
-    print(senders)
 
     context = {'message_count': message_count, 'messages': messages_to, 'senders': senders}
     return render(request, 'base/home.html', context)

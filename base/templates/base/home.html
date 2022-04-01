@@ -110,11 +110,11 @@
 <div class="container">
     <div class="item">
         <h1 style="text-align:center">Positivity Points:</h1>
-        <p style="text-align: center;">(point total)</p>
+        <p style="text-align: center;">{{request.user.profile.pointsReceived}}</p>
     </div>
     <div class="item">
         <h1 style="text-align: center;">Points to Give:</h1>
-        <p style="text-align: center;">(point total)</p>
+        <p style="text-align: center;">{{request.user.profile.pointsToSend}}</p>
     </div>
     <div class="item">
         <h1 style="text-align: center;">Time Until Points Refresh:</h1>
