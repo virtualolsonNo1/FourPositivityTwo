@@ -4,7 +4,11 @@
 </div>
 <p>{{settings}}</p>
 <div>
-    <p style="color:black;">{{name}}</p>
+    <form method="POST" action="", enctype=""multipart/form-data>
+        {% csrf_token %} 
+        {{form.as_p}}  
+        <input type="submit" value="Update Settings" style="color: white; border-radius: 12px; background-color: #E98D20;" />
+    </form>
 </div>
 
 {% endblock content %}

@@ -1,3 +1,4 @@
+from django.conf import Settings
 from django.dispatch import receiver
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -6,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm
+from .forms import CreateUserForm, SettingsForm
 from .forms import MessageForm
 from .models import Message
 from .models import Profile
@@ -151,5 +152,19 @@ def leaderboard(request):
 
 @login_required(login_url='login')
 def settings(request):
-    context = {'settings': "Testing settings page"}
+    user = request.user
+    profiles = Profile.objects.all()
+    for profile in profiles:
+        if profile.user == user:
+            profile = Profile.objects.get(user=user)
+    form = SettingsForm(instance=profile)
+    # IF USER ADMIN PANEL USED, request won't be post so doesn't work??????
+    if request.method == 'POST':
+        form = SettingsForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            user.email = profile.email
+            user.save(update_fields=['email'])
+            return redirect('home')
+    context = {'form': form}
     return render(request, 'base/settings.html', context)
