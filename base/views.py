@@ -142,5 +142,7 @@ def profile(request):
 
 @login_required(login_url='login')
 def leaderboard(request):
-    context = {'topSender': "Top sender: joe bob"}
+    profiles = Profile.objects.all()
+    profiles = profiles[:10]
+    context = {'topSenders': profiles}
     return render(request, 'base/leaderboard.html', context)

@@ -2,6 +2,10 @@
 <div>
     <h1>Leaderboard</h1>
 </div>
+{% for profile in topSenders %}
+<p>{{profile.user.username}}</p>
+<p>{{profile.pointsReceived}}</p>
+{% endfor %}
 <div>
     <p style="color:black;">{{topSender}}</p>
 </div>

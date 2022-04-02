@@ -27,7 +27,7 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['-pointsReceived']
 
     def __str__(self):
         return str(self.user)
