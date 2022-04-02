@@ -43,4 +43,4 @@ class StoreItem(models.Model):
         ordering = ['-timesPurchased']
 
     def __str__(self):
-        return self.body[0:50]
+        return self.name
