@@ -34,3 +34,17 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user)
+        
+class StoreItem(models.Model):
+    name = models.CharField(max_length=50)
+    image = models.ImageField()
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    cost = models.IntegerField()
+    timesPurchased = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['-timesPurchased']
+
+    def __str__(self):
+        return self.name 
