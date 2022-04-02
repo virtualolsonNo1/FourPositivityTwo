@@ -11,6 +11,7 @@ from .forms import CreateUserForm, SettingsForm
 from .forms import MessageForm
 from .models import Message
 from .models import Profile
+from .models import StoreItem
 # 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
 # 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
 # 50 Points: 💎👑💛
@@ -155,9 +156,23 @@ def createMessage(request):
     context = {'form': form}
     return render(request, 'base/message_form.html', context)
 
+def purchaseItem(item,profile):
+    if profile.pointsRecieved < item.cost:
+        error = "Error not enough points!"
+        print("Error not enough points!")
+        return error
+    profile.pointRecieved = profile.pointsRecived- item.cost
+    message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
+    print(message)
+    return message
+ 
+ 
 @login_required(login_url='login')
 def store(request):
-    context = {'storeItems': "buy some pizza"}
+    storeItems = StoreItem.objects.all()
+    for item in storeItems:
+        print(str(item))
+    context = {'storeItems': storeItems}
     return render(request, 'base/store.html', context)
 
 @login_required(login_url='login')

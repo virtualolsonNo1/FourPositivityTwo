@@ -3,7 +3,13 @@
     <h1>Store</h1>
 </div>
 <div>
-    <p style="color:black;">{{storeItems}}</p>
+    {% for item in storeItems %}
+    <p style="color:black;">{{item.name}}</p>
+    <img src={{item.image}} alt = {{item.name}}>
+    <p style="color:black;">Cost: {{item.cost}}</p>
+    {% endfor %}
+ 
+ 
 </div>
-
+ 
 {% endblock content %}
