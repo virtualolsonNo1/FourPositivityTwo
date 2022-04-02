@@ -112,7 +112,26 @@ def message(request, pk):
     message = Message.objects.get(id=pk)
     context = {'message': message}
     return render(request, 'base/message.html', context)
+def updatePoints(senderName,recieverName,pointTotal):
+    sender = Profile.objects.get(user=senderName.id)
+    reciever = Profile.objects.get(user=recieverName.id)
 
+    # check sender has enough points
+    if reciever.pointsToSend < pointTotal:
+        print("Error not enough sender points!")
+        return False
+
+    # decrement sender points
+    print("Sender " + senderName.username + " spent " + str(pointTotal) + " sender points")
+    print("Sender points before " +  str(sender.pointsToSend))
+    sender.pointsToSend = sender.pointsToSend - pointTotal
+    print("Sender points after " +  str(sender.pointsToSend))
+    # increment reciever points 
+    print("Reciever " + recieverName.username + " recieved " + str(pointTotal) + " points")
+    print("Reciever points before " +  str(reciever.pointsReceived))
+    reciever.pointsReceived = reciever.pointsReceived + pointTotal
+    print("Reciever points after " +  str(reciever.pointsReceived))
+    return True
 @login_required(login_url='login')
 def createMessage(request):
     form = MessageForm()
@@ -126,9 +145,13 @@ def createMessage(request):
             obj.pointTotal = pointTotal
 
             # decrement sender points and increment reciever points
-            
-            obj.save()
-            return redirect('home')
+            success = updatePoints(obj.sender,obj.receiver, pointTotal)          
+            if success:
+                obj.save()
+                return redirect('home')
+            else:
+                # print error message
+                return 
     context = {'form': form}
     return render(request, 'base/message_form.html', context)
 
