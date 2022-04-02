@@ -13,5 +13,6 @@ urlpatterns = [
     path('store/', views.store, name="store"),
     path('profile/', views.profile, name="profile"),
     path('leaderboard/', views.leaderboard, name="leaderboard"),
+    path('settings/', views.settings, name="settings"),
 
 ]

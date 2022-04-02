@@ -59,6 +59,7 @@ def registerPage(request):
             user.save()
             Profile.objects.create(
                 user=user,
+                email = user.email
             )
             login(request, user)
             return redirect('home')
@@ -112,27 +113,6 @@ def message(request, pk):
     context = {'message': message}
     return render(request, 'base/message.html', context)
 
-def updatePoints(senderName,recieverName,pointTotal):
-    sender = Profile.objects.get(user=senderName.id)
-    reciever = Profile.objects.get(user=recieverName.id)
-    
-    # check sender has enough points
-    if reciever.pointsToSend < pointTotal:
-        print("Error not enough sender points!")
-        return False
-
-    # decrement sender points
-    print("Sender " + senderName.username + " spent " + str(pointTotal) + " sender points")
-    print("Sender points before " +  str(sender.pointsToSend))
-    sender.pointsToSend = sender.pointsToSend - pointTotal
-    print("Sender points after " +  str(sender.pointsToSend))
-    # increment reciever points 
-    print("Reciever " + recieverName.username + " recieved " + str(pointTotal) + " points")
-    print("Reciever points before " +  str(reciever.pointsReceived))
-    reciever.pointsReceived = reciever.pointsReceived + pointTotal
-    print("Reciever points after " +  str(reciever.pointsReceived))
-    return True
-    
 @login_required(login_url='login')
 def createMessage(request):
     form = MessageForm()
@@ -144,14 +124,11 @@ def createMessage(request):
             # get points for emojis in the message
             pointTotal = getPoints(obj.body)
             obj.pointTotal = pointTotal
-            success = updatePoints(obj.sender,obj.receiver, pointTotal)          
-            if success:
-                obj.save()
-                return redirect('home')
-            else:
-                # print error message
-                return 
+
+            # decrement sender points and increment reciever points
             
+            obj.save()
+            return redirect('home')
     context = {'form': form}
     return render(request, 'base/message_form.html', context)
 
@@ -162,14 +139,16 @@ def store(request):
 
 @login_required(login_url='login')
 def profile(request):
-    context = {'name': "joe bob"}
+    user = request.user
+    context = {'user': user}
     return render(request, 'base/profile.html', context)
 
 @login_required(login_url='login')
 def leaderboard(request):
-    context = {'topSender': "Top sender: joe bob"}
+    profiles = Profile.objects.all()
+    profiles = profiles[:10]
+    context = {'topSenders': profiles}
     return render(request, 'base/leaderboard.html', context)
-<<<<<<< HEAD
 
 @login_required(login_url='login')
 def settings(request):
@@ -189,5 +168,3 @@ def settings(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'base/settings.html', context)
-=======
->>>>>>> 6b286bb073bc998a919cd9199b8ac693c2c6e01e
