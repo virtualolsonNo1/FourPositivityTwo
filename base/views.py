@@ -137,7 +137,8 @@ def store(request):
 
 @login_required(login_url='login')
 def profile(request):
-    context = {'name': "joe bob"}
+    user = request.user
+    context = {'user': user}
     return render(request, 'base/profile.html', context)
 
 @login_required(login_url='login')
