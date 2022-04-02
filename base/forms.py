@@ -1,5 +1,6 @@
+from tkinter.tix import Form
 from django.forms import ModelForm
-from .models import Message, Profile
+from .models import Message, Profile, PurchaseItem
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -18,3 +19,8 @@ class SettingsForm(ModelForm):
     class Meta:
         model = Profile
         fields = ['email', 'privacyOn', 'notificationsOn', 'profilePic']
+
+class PurchaseForm(ModelForm):
+    class Meta:
+        model = PurchaseItem
+        fields = ['item']

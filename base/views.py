@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm, SettingsForm
+from .forms import CreateUserForm, SettingsForm, PurchaseForm
 from .forms import MessageForm
 from .models import Message
 from .models import Profile
@@ -132,6 +132,8 @@ def updatePoints(senderName,recieverName,pointTotal):
     print("Reciever points before " +  str(reciever.pointsReceived))
     reciever.pointsReceived = reciever.pointsReceived + pointTotal
     print("Reciever points after " +  str(reciever.pointsReceived))
+    sender.save()
+    reciever.save()
     return True
 @login_required(login_url='login')
 def createMessage(request):
@@ -157,22 +159,40 @@ def createMessage(request):
     return render(request, 'base/message_form.html', context)
 
 def purchaseItem(item,profile):
-    if profile.pointsRecieved < item.cost:
+    if profile.pointsReceived < item.cost:
         error = "Error not enough points!"
         print("Error not enough points!")
         return error
-    profile.pointRecieved = profile.pointsRecived- item.cost
+    profile.pointsReceived = profile.pointsReceived- item.cost
+    profile.save()
     message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
     print(message)
     return message
  
- 
+def addStoreItem(name, cost):
+    newItem = StoreItem.objects.create(name=name,cost=20)
+    newItem.save()
 @login_required(login_url='login')
 def store(request):
+    form = PurchaseForm()
     storeItems = StoreItem.objects.all()
     for item in storeItems:
         print(str(item))
-    context = {'storeItems': storeItems}
+    currProf = Profile.objects.get(user=request.user.id)
+    userPoints = currProf.pointsReceived
+    if request.method == 'POST':
+        form = PurchaseForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit = False)
+            currProf = Profile.objects.get(user=request.user.id)
+            # purchase
+            success = purchaseItem(obj.item,currProf)          
+            if success:
+                return redirect('home')
+            else:
+                # print error message
+                return 
+    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints}
     return render(request, 'base/store.html', context)
 
 @login_required(login_url='login')

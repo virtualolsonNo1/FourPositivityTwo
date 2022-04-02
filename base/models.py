@@ -48,3 +48,11 @@ class StoreItem(models.Model):
 
     def __str__(self):
         return self.name 
+class PurchaseItem(models.Model):
+    item = models.ForeignKey(StoreItem, on_delete=models.CASCADE, related_name='+')
+
+    class Meta:
+        ordering = ['-item']
+
+    def __str__(self):
+        return self.name
