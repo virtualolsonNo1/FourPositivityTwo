@@ -58,6 +58,7 @@ def registerPage(request):
             user.save()
             Profile.objects.create(
                 user=user,
+                email = user.email
             )
             login(request, user)
             return redirect('home')
@@ -147,3 +148,8 @@ def leaderboard(request):
     profiles = profiles[:10]
     context = {'topSenders': profiles}
     return render(request, 'base/leaderboard.html', context)
+
+@login_required(login_url='login')
+def settings(request):
+    context = {'settings': "Testing settings page"}
+    return render(request, 'base/settings.html', context)

@@ -19,8 +19,11 @@ class Message(models.Model):
         return self.body[0:50]
 
 class Profile(models.Model):
-    #profilePic?????
+    profilePic = models.ImageField(null=True, blank=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    email = models.EmailField(null=True, blank=True)
+    notificationsOn = models.BooleanField(default=True)
+    privacyOn = models.BooleanField(default=False)
     pointsToSend = models.IntegerField(default=100)
     pointsReceived = models.IntegerField(default=0)
     updated = models.DateTimeField(auto_now=True)
