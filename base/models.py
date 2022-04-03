@@ -18,6 +18,19 @@ class Message(models.Model):
     def __str__(self):
         return self.body[0:50]
 
+class StoreItem(models.Model):
+    name = models.CharField(max_length=50)
+    image = models.ImageField()
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    cost = models.IntegerField()
+    timesPurchased = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['-timesPurchased']
+
+    def __str__(self):
+        return self.name 
 class Profile(models.Model):
     profilePic = models.ImageField(null=True, blank=True)
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
@@ -35,24 +48,13 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.user)
         
-class StoreItem(models.Model):
-    name = models.CharField(max_length=50)
-    image = models.ImageField()
-    updated = models.DateTimeField(auto_now=True)
-    created = models.DateTimeField(auto_now_add=True)
-    cost = models.IntegerField()
-    timesPurchased = models.IntegerField(default=0)
 
-    class Meta:
-        ordering = ['-timesPurchased']
-
-    def __str__(self):
-        return self.name 
 class PurchaseItem(models.Model):
     item = models.ForeignKey(StoreItem, on_delete=models.CASCADE, related_name='+')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
 
     class Meta:
         ordering = ['-item']
 
     def __str__(self):
-        return self.name
+        return str(self.item)

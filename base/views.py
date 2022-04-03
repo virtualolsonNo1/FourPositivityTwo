@@ -165,6 +165,7 @@ def purchaseItem(item,profile):
         return error
     profile.pointsReceived = profile.pointsReceived- item.cost
     profile.save()
+
     message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
     print(message)
     return message
@@ -184,10 +185,12 @@ def store(request):
         form = PurchaseForm(request.POST)
         if form.is_valid():
             obj = form.save(commit = False)
+            obj.user = request.user
             currProf = Profile.objects.get(user=request.user.id)
             # purchase
             success = purchaseItem(obj.item,currProf)          
             if success:
+                obj.save()
                 return redirect('home')
             else:
                 # print error message
