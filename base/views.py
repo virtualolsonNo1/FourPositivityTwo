@@ -12,6 +12,7 @@ from .forms import MessageForm
 from .models import Message
 from .models import Profile
 from .models import StoreItem
+from .models import PurchaseItem
 # 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
 # 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
 # 50 Points: 💎👑💛
@@ -165,7 +166,8 @@ def purchaseItem(item,profile):
         return error
     profile.pointsReceived = profile.pointsReceived- item.cost
     profile.save()
-
+    item.timesPurchased = item.timesPurchased + 1
+    item.save()
     message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
     print(message)
     return message
@@ -201,7 +203,10 @@ def store(request):
 @login_required(login_url='login')
 def profile(request):
     user = request.user
-    context = {'user': user}
+    inventory = PurchaseItem.objects.filter(user=request.user.id)
+    print(inventory)
+    print(str(inventory))
+    context = {'user': user,'inventory':inventory}
     return render(request, 'base/profile.html', context)
 
 @login_required(login_url='login')
