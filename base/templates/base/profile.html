@@ -1,0 +1,19 @@
+{% extends 'main.html' %} {% block content %}
+<div>
+    <h1>Profile</h1>
+</div>
+<p>{{user.username}}</p>
+<p>{{user.email}}</p>
+<p>Points to Send:</p>
+<p>{{request.user.profile.pointsToSend}}</p>
+<p>Points Received:</p>
+<p>{{request.user.profile.pointsReceived}}</p>
+{% for item in inventory %}
+<p style="color:black;">{{item}}</p>
+<img src={{item.image}} alt = {{item.name}}>
+{% endfor %}
+<div>
+    <p style="color:black;">{{name}}</p>
+</div>
+
+{% endblock content %}

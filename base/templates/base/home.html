@@ -110,11 +110,11 @@
 <div class="container">
     <div class="item">
         <h1 style="text-align:center">Positivity Points:</h1>
-        <p style="text-align: center;">(point total)</p>
+        <p style="text-align: center;">{{request.user.profile.pointsReceived}}</p>
     </div>
     <div class="item">
         <h1 style="text-align: center;">Points to Give:</h1>
-        <p style="text-align: center;">(point total)</p>
+        <p style="text-align: center;">{{request.user.profile.pointsToSend}}</p>
     </div>
     <div class="item">
         <h1 style="text-align: center;">Time Until Points Refresh:</h1>
@@ -122,10 +122,11 @@
     </div>
 </div>
 <div class="navbar">
-    <a href="#">Profile</a>
-    <a href="#">Store</a>
-    <a href="#">Leaderboard</a>
-    <a href="{% url 'create-message' %}"> Create Message</a>
+    <a href="{% url 'profile' %}">Profile</a>
+    <a href="{% url 'store' %}">Store</a>
+    <a href="{% url 'leaderboard' %}">Leaderboard</a>
+    <a href="{% url 'create-message' %}">Create Message</a>
+    <a href="{% url 'settings' %}">Settings</a>
     <a href="#" class="right">
         <form method="GET" action="{% url 'home' %}">
             <input type="text" name="q" placeholder="Search Messages By User" />

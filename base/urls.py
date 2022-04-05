@@ -10,4 +10,9 @@ urlpatterns = [
     path('message/<str:pk>/', views.message, name="message"),
 
     path('create-message/', views.createMessage, name="create-message"),
+    path('store/', views.store, name="store"),
+    path('profile/', views.profile, name="profile"),
+    path('leaderboard/', views.leaderboard, name="leaderboard"),
+    path('settings/', views.settings, name="settings"),
+
 ]
