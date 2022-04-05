@@ -30,7 +30,7 @@
         {% if request.user.is_authenticated %}
         <!-- <p>Hello {{request.user}}</p> -->
         <a href="{% url 'logout' %}">
-            <h1 style="text-align: right; color: white; text-decoration-line: none;">Logout</h1>
+            <h1 style="text-align: right; color: white; text-decoration-line: none; text-decoration-color: white;">Logout</h1>
         </a> {% else %}
         <a href="{% url 'login' %}">
             <h1 style="text-align: right; color:white; text-decoration-line: none;">Login</h1>

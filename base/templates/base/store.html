@@ -6,15 +6,15 @@
     <p style="color:black;">You have {{userPoints}} positivity points to spend!</p>
     {% for item in storeItems %}
     <p style="color:black;">{{item.name}}</p>
-    <img src={{item.image}} alt = {{item.name}}>
+    <img src={{item.image}} alt={ {item.name}}>
     <p style="color:black;">Cost: {{item.cost}}</p>
     {% endfor %}
     <form method="POST" action="">
-        {% csrf_token %} {{form.as_p}}  
-        <input type="submit" value="Send" style="color: white; border-radius: 12px; background-color: #E98D20;" />
+        {% csrf_token %} {{form.as_p}}
+        <input type="submit" value="Buy" style="color: white; border-radius: 12px; background-color: #E98D20;" />
     </form>
- 
- 
+
+
 </div>
- 
+
 {% endblock content %}
