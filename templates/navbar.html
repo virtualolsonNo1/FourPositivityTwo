@@ -9,6 +9,7 @@
         flex-grow: 1;
         height: 100px;
         color: white;
+        text-decoration: none;
     }
     
     .item+.item {
@@ -18,8 +19,8 @@
 <div class="container">
 
     <div class="item">
-        <a href="/">
-            <h1 style="text-align: left; color: white; text-decoration-line: none;">Home</h1>
+        <a class="noDecoration" href="/">
+            <h1 style="text-align: left; color: white; text-decoration: none  !important;">Home</h1>
             <!-- <img src="../templates/images/circle4.png" width="50px" height="50px"> -->
         </a>
     </div>
@@ -29,7 +30,7 @@
     <div class="item">
         {% if request.user.is_authenticated %}
         <!-- <p>Hello {{request.user}}</p> -->
-        <a href="{% url 'logout' %}">
+        <a class="noDecoration" href="{% url 'logout' %}">
             <h1 style="text-align: right; color: white; text-decoration-line: none; text-decoration-color: white;">Logout</h1>
         </a> {% else %}
         <a href="{% url 'login' %}">
