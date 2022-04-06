@@ -93,7 +93,15 @@
     
     .container {
         display: flex;
+        /* background: #ED3E4B; */
         background: #6EBFB6;
+        padding: 80px;
+    }
+    
+    .container2 {
+        display: flex;
+        background: #ED3E4B;
+        /* background: #6EBFB6; */
         padding: 80px;
     }
     
@@ -153,7 +161,8 @@
         <div>
             {% for message in messages %}
             <div>
-                <p>{{message.sender.username}}</p>
+                <p>from: {{message.sender.username}}<br>message:{{message.body}}
+                    <br>positivity points recieved: {{message.pointTotal}}</p>
                 {% if request.user == message.recipient %}
                 <span>@{{message.sender.username}}</span>
                 <h5>{{message.id}} -- <a href="{% url 'message' message.id %}">{{message.body}}
