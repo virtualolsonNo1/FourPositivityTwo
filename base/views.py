@@ -175,6 +175,11 @@ def purchaseItem(item,profile):
 def addStoreItem(name, cost):
     newItem = StoreItem.objects.create(name=name,cost=20)
     newItem.save()
+def editStoreImage(item,image):
+    results = StoreItem.objects.filter(name=item)
+    newItem = results[0]
+    newItem.image = image
+    newItem.save()
 @login_required(login_url='login')
 def store(request):
     form = PurchaseForm()

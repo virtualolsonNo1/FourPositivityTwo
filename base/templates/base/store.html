@@ -5,8 +5,9 @@
 <div>
     <p style="color:black;">You have {{userPoints}} positivity points to spend!</p>
     {% for item in storeItems %}
-    <p style="color:black;">{{item.name}}</p>
-    <img src={{item.image}} alt={ {item.name}}>
+    <p style="color:black;">{{item}}</p>
+    {% load static %}
+    <img src="{% static item.image %}" alt="My image">
     <p style="color:black;">Cost: {{item.cost}}</p>
     {% endfor %}
     <form method="POST" action="">

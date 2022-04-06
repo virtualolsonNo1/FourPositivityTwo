@@ -2,17 +2,19 @@
 <div>
     <h1>Profile</h1>
 </div>
-<p>{{user.username}}</p>
-<p>{{user.email}}</p>
-<p>Points to Send:</p>
-<p>{{request.user.profile.pointsToSend}}</p>
-<p>Points Received:</p>
-<p>{{request.user.profile.pointsReceived}}</p>
-{% for item in inventory %}
-<p style="color:black;">{{item}}</p>
-<img src={{item.image}} alt = {{item.name}}>
-{% endfor %}
 <div>
+    <p>{{user.username}}</p>
+    <p>{{user.email}}</p>
+    <p>Points to Send:</p>
+    <p>{{request.user.profile.pointsToSend}}</p>
+    <p>Points Received:</p>
+    <p>{{request.user.profile.pointsReceived}}</p>
+    {% for purchasedItem in inventory %}
+    <p style="color:black;">{{purchasedItem.item}}</p>
+    {% load static %}
+    <img src="{% static purchasedItem.item.image %}" alt="{{item.name}}">
+    {% endfor %}
+
     <p style="color:black;">{{name}}</p>
 </div>
 
