@@ -1,21 +1,59 @@
 {% extends 'main.html' %} {% block content %}
+<style>
+    .sPoints {
+        display: flex;
+        background: #ED3E4B;
+        padding: 20px;
+        border-radius: 12px;
+    }
+    
+    .rPoints {
+        display: flex;
+        background: #E98D20;
+        padding: 20px;
+        border-radius: 12px;
+    }
+    
+    .item {
+        flex-grow: 1;
+        height: 130px;
+        color: white;
+    }
+    
+    .item+.item {
+        margin-left: 2%;
+    }
+</style>
 <div>
-    <h1>Profile</h1>
-</div>
-<div>
-    <p>{{user.username}}</p>
-    <p>{{user.email}}</p>
-    <p>Points to Send:</p>
-    <p>{{request.user.profile.pointsToSend}}</p>
-    <p>Points Received:</p>
-    <p>{{request.user.profile.pointsReceived}}</p>
-    {% for purchasedItem in inventory %}
-    <p style="color:black;">{{purchasedItem.item}}</p>
-    {% load static %}
-    <img src="{% static purchasedItem.item.image %}" alt="{{item.name}}">
-    {% endfor %}
+    <h1 style="text-align:center; color: #ED3E4B;">{{user.username}}</h1>
+    <p style="text-align: center;">{{user.email}}</p>
 
-    <p style="color:black;">{{name}}</p>
+
+</div>
+<div style="display: flex; flex-direction: columns;">
+    <div style="width: 60vw;">
+        <h2>Purchased Items:</h2>
+        {% for purchasedItem in inventory %}
+        <p style="color:black;">{{purchasedItem.item}}</p>
+        {% load static %}
+        <img src="{% static purchasedItem.item.image %}" alt="{{item.name}}"> {% endfor %}
+
+        <p style="color:black;">{{name}}</p>
+    </div>
+    <div style="width: 40vw;">
+        <div style="display: flex; flex-direction: row;">
+            <h2>Points to Send:</h2>
+            <div class="sPoints">
+                <p style="color: white;">{{request.user.profile.pointsToSend}}</p>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: row;">
+            <h2>Points Received:</h2>
+            <div class="rPoints">
+                <p style="color: white;">{{request.user.profile.pointsReceived}}</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}
