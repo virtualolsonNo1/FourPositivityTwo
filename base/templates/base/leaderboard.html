@@ -1,13 +1,23 @@
 {% extends 'main.html' %} {% block content %}
+<style>
+
+</style>
 <div>
-    <h1>Leaderboard</h1>
+    <h1 style="text-align: center;">Leaderboard</h1>
 </div>
-{% for profile in topSenders %}
-<p>{{profile.user.username}}</p>
-<p>{{profile.pointsReceived}}</p>
-{% endfor %}
-<div>
-    <p style="color:black;">{{topSender}}</p>
+<div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+
+    <div>{% for profile in topSenders %}
+        <p>{{profile.user.username}}</p>
+        <p>{{profile.pointsReceived}}</p>{% endfor %}
+    </div>
+
+
+
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+        <p style="color:black;">{{topSender}}</p>
+    </div>
 </div>
+
 
 {% endblock content %}
