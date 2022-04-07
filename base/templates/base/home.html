@@ -93,7 +93,15 @@
     
     .container {
         display: flex;
+        /* background: #ED3E4B; */
         background: #6EBFB6;
+        padding: 80px;
+    }
+    
+    .container2 {
+        display: flex;
+        background: #ED3E4B;
+        /* background: #6EBFB6; */
         padding: 80px;
     }
     
@@ -129,7 +137,7 @@
     <a href="{% url 'settings' %}">Settings</a>
     <a href="#" class="right">
         <form method="GET" action="{% url 'home' %}">
-            <input type="text" name="q" placeholder="Search Messages By User" />
+            <input type="text" name="q" placeholder=" Search Messages By User" style=" border-radius: 12px; height: 25px; width: 260px" />
         </form>
     </a>
 </div>
@@ -154,7 +162,7 @@
             {% for message in messages %}
             <div>
                 <p>from: {{message.sender.username}}<br>message:{{message.body}}
-                <br>positivity points recieved: {{message.pointTotal}}</p>
+                    <br>positivity points recieved: {{message.pointTotal}}</p>
                 {% if request.user == message.recipient %}
                 <span>@{{message.sender.username}}</span>
                 <h5>{{message.id}} -- <a href="{% url 'message' message.id %}">{{message.body}}
