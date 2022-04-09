@@ -1,8 +1,18 @@
 {% extends 'main.html' %} {% block content %}
 <style>
+<<<<<<< HEAD
     * {
         margin: 0; padding: 0; border: 0;
     }
+=======
+    .backpack {
+        display: flex;
+        outline-color: #FED760;
+        outline-style: solid;
+        width: 55vw
+    }
+    
+>>>>>>> c6d28deeacee214ed41d5b9d3eb92b8a255f06f0
     .sPoints {
         display: flex;
         background: #ED3E4B;
@@ -19,7 +29,7 @@
     
     .item {
         flex-grow: 1;
-        height: 130px;
+        height: 100px;
         color: white;
     }
     
@@ -28,7 +38,7 @@
     }
 </style>
 <div>
-    <h1 style="text-align:center; color: #ED3E4B;">{{user.username}}</h1>
+    <h1 style="text-align:center; color: #ED3E4B; ">{{user.username}}</h1>
     <p style="text-align: center;">{{user.email}}</p>
 
 
@@ -36,25 +46,37 @@
 <div style="display: flex; flex-direction: columns;">
     <div style="width: 60vw;">
         <h2>Purchased Items:</h2>
-        {% for purchasedItem in inventory %}
-        <p style="color:black;">{{purchasedItem.item}}</p>
-        {% load static %}
-        <img src="{% static purchasedItem.item.image %}" alt="{{item.name}}"> {% endfor %}
+        <div class="backpack" style="width: 55vw">
+            {% for purchasedItem in inventory %}
+            <p style="color:black;">{{purchasedItem.item}}</p>
+            {% load static %}
+            <img src="{% static purchasedItem.item.image %}" alt="{{item.name}}"> {% endfor %}
 
-        <p style="color:black;">{{name}}</p>
+            <p style="color:black;">{{name}}</p>
+        </div>
+
+
     </div>
     <div style="width: 40vw;">
         <div style="display: flex; flex-direction: row;">
             <h2>Points to Send:</h2>
-            <div class="sPoints">
-                <p style="color: white;">{{request.user.profile.pointsToSend}}</p>
+
+        </div>
+        <div class="sPoints">
+            <div class="item">
+                <h1 style="color: white; text-align: center;">{{request.user.profile.pointsToSend}}</h1>
             </div>
+
         </div>
         <div style="display: flex; flex-direction: row;">
             <h2>Points Received:</h2>
-            <div class="rPoints">
-                <p style="color: white;">{{request.user.profile.pointsReceived}}</p>
+
+        </div>
+        <div class="rPoints">
+            <div class="item">
+                <h1 style="color: white; text-align: center;">{{request.user.profile.pointsReceived}}</h1>
             </div>
+
         </div>
     </div>
 </div>
