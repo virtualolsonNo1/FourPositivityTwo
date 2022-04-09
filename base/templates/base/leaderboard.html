@@ -1,16 +1,35 @@
 {% extends 'main.html' %} {% block content %}
 <style>
-
+    .containerL {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    .itemL {
+        width: 30%;
+        padding-bottom: 10px;
+        /* 32:18, i.e. 16:9 */
+        margin-bottom: 2%;
+        /* (100-32*3)/2 */
+    }
 </style>
-<div>
-    <h1 style="text-align: center;">Leaderboard</h1>
-</div>
-<div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+<h1 style="text-align: center;">Leaderboard</h1>
 
-    <div>{% for profile in topSenders %}
-        <p>{{profile.user.username}}</p>
-        <p>{{profile.pointsReceived}}</p>{% endfor %}
+<div class="containerL">
+    {% for profile in topSenders %}
+    <div class="itemL">
+        <h3>{{ forloop.counter }}</h3>
     </div>
+    <div class="itemL">
+        <p>{{profile.user.username}}</p>
+    </div>
+    <div class="itemL">
+        <p>{{profile.pointsReceived}}</p>
+    </div>
+    {% endfor %}
+
+
 
 
 
