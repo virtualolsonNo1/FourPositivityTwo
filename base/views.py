@@ -231,9 +231,14 @@ def settings(request):
     form = SettingsForm(instance=profile)
     # IF USER ADMIN PANEL USED, request won't be post so doesn't work??????
     if request.method == 'POST':
-        form = SettingsForm(request.POST, request.FILES, instance=profile)
+        form = SettingsForm(request.POST, instance=profile)
         if form.is_valid():
+            form.save(commit=False)
+            test = request.POST['profilePic']
+            profile.profilePic = test
+            form.profilePic = test
             form.save()
+            print(form.cleaned_data)
             user.email = profile.email
             user.save(update_fields=['email'])
             return redirect('home')
