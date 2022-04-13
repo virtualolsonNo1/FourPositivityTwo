@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import Profile, StoreItem, PurchaseItem
-
 # Create your tests here.
 class YourTestClass(TestCase):
     @classmethod
@@ -55,3 +54,67 @@ class YourTestClass(TestCase):
         expected = "testuser"
 
         self.assertEqual(discoPurchase.user.username,expected,"purchasedItem created correctly")
+    def test_purchasedItem_purchase(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile 
+        test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+
+        # create shop item 
+        discoBall = StoreItem.objects.create(name="disco ball",image="image\StoreAssets\DiscoBallAsset.png",cost=20)
+
+        # create PurchaseItem 
+        discoPurchase = PurchaseItem.objects.create(item=discoBall,user=self.user)
+
+        # set expected
+        PurchaseItem.purchase(discoBall,test1)
+        expected = 80
+        actual = test1.pointsReceived
+        self.assertEqual(actual,expected,"Expected " + str(expected) + " but user had " + str(actual) + " points")
+    def test_purchasedItem_purchaseLarger(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile 
+        test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+
+        # create shop item 
+        discoBall = StoreItem.objects.create(name="disco ball",image="image\StoreAssets\DiscoBallAsset.png",cost=50)
+
+        # set expected
+        PurchaseItem.purchase(discoBall,test1)
+        expected = 50
+        actual = test1.pointsReceived
+        self.assertEqual(actual,expected,"Expected " + str(expected) + " but user had " + str(actual) + " points")
+
+    def test_purchasedItem_purchaseFailed(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile 
+        test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+
+        # create shop item 
+        discoBall = StoreItem.objects.create(name="disco ball",image="image\StoreAssets\DiscoBallAsset.png",cost=150)
+
+        # set expected
+        PurchaseItem.purchase(discoBall,test1)
+        expected = 100
+        actual = test1.pointsReceived
+        self.assertEqual(actual,expected,"Expected " + str(expected) + " but user had " + str(actual) + " points")
+    def test_purchasedItem_purchaseFullCost(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile 
+        test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+
+        # create shop item 
+        discoBall = StoreItem.objects.create(name="disco ball",image="image\StoreAssets\DiscoBallAsset.png",cost=100)
+
+        # set expected
+        PurchaseItem.purchase(discoBall,test1)
+        expected = 0
+        actual = test1.pointsReceived
+        self.assertEqual(actual,expected,"Expected " + str(expected) + " but user had " + str(actual) + " points")

@@ -58,3 +58,15 @@ class PurchaseItem(models.Model):
 
     def __str__(self):
         return str(self.item)
+    def purchase(item,profile):
+        if profile.pointsReceived < item.cost:
+            error = "Error not enough points!"
+            print("Error not enough points!")
+            return error
+        profile.pointsReceived = profile.pointsReceived- item.cost
+        profile.save()
+        item.timesPurchased = item.timesPurchased + 1
+        item.save()
+        message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
+        print(message)
+        return message
