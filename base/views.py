@@ -141,6 +141,7 @@ def createMessage(request):
     form = MessageForm()
     if request.method == 'POST':
         form = MessageForm(request.POST)
+        validReceivers  = User.objects.filter(~Q(username=request.user.username))
         if form.is_valid():
             obj = form.save(commit = False)
             obj.sender = request.user
@@ -156,7 +157,7 @@ def createMessage(request):
             else:
                 # print error message
                 return 
-    context = {'form': form}
+    context = {'form': form,'validReceivers':validReceivers}
     return render(request, 'base/message_form.html', context)
 
 def purchaseItem(item,profile):
@@ -184,6 +185,7 @@ def editStoreImage(item,image):
 def store(request):
     form = PurchaseForm()
     storeItems = StoreItem.objects.all()
+    userItems = PurchaseItem.objects.filter(user=request.user.id)
     for item in storeItems:
         print(str(item))
     currProf = Profile.objects.get(user=request.user.id)
@@ -195,14 +197,14 @@ def store(request):
             obj.user = request.user
             currProf = Profile.objects.get(user=request.user.id)
             # purchase
-            success = purchaseItem(obj.item,currProf)          
+            success = PurchaseItem.purchase(obj.item,currProf)          
             if success:
                 obj.save()
                 return redirect('home')
             else:
                 # print error message
                 return 
-    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints}
+    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userInventory':userItems}
     return render(request, 'base/store.html', context)
 
 @login_required(login_url='login')
