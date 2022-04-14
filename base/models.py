@@ -52,7 +52,18 @@ class Profile(models.Model):
 class PurchaseItem(models.Model):
     item = models.ForeignKey(StoreItem, on_delete=models.CASCADE, related_name='+')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
-
+    def purchase(item,profile):
+        if profile.pointsReceived < item.cost:
+                error = "Error not enough points!"
+                print("Error not enough points!")
+                return error
+        profile.pointsReceived = profile.pointsReceived- item.cost
+        profile.save()
+        item.timesPurchased = item.timesPurchased + 1
+        item.save()
+        message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
+        print(message)
+        return message 
     class Meta:
         ordering = ['-item']
 
