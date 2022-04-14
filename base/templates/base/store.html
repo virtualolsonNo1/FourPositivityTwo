@@ -3,7 +3,8 @@
     *{
         margin: 0; border: 0; padding: 0; 
     }
-    .main-container {
+
+    .store-container {
         display: flex;
         min-height: calc(100vh - 100px)
     }
@@ -20,6 +21,8 @@
     .content{
         display: flex;
         flex-grow: 1;
+        flex-direction: column;
+        
     }
 
     .sidebar heading{
@@ -34,37 +37,141 @@
         min-height: 50px;
         display: flex;
     }
+    
+    .content header{
+        min-height: 7vh;
+        background-color: yellow
+        font-weight: 100;
+        font-size: 2.5vw;
+        color: black;
+        font: sans-serif;
+        text-align: right; 
+        margin: 20px;
+        border-bottom: 1px solid black;
+    }
+
+    .products {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+      }
+
+    .product-card {
+        padding: 1%;
+        margin: 2.5%;
+        flex-grow: 1;
+        flex-basis: 25%;
+        display: flex;
+        border: 1px solid #FED760;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        background-color: #FED760;
+        border-radius: 20px;
+
+      }
+
+    .product-image img {
+        max-width: 100%;
+      }
+    .product-info {
+        margin-top: auto;
+      }
+
+    .purchase{
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        background-color: white;
+        min-height: 10vh;
+    }
+
+    .selectItem{
+        display: flex;
+        align-items: right;
+        justify-content: right;
+        margin: 15px;
+    }
+
+    .buyButton{
+        display: flex;
+        align-items: right;
+        justify-content: right;
+        margin: 15px;
+    }
+
+    
+      
 
 
 </style>
 
-<div class = "main-container">
+<div class = "store-container">
     <aside class ="sidebar">
         <space></space>
         <heading>Recently<br> Purchased</heading>
     </aside>
     <main class = "content">
-        whats up
+        <header> {{userPoints}} Positivity Points</header>
+        
+        <section class="products">
+            {% for item in storeItems %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% load static %}
+                    <img src="{% static item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
+                </div>
+                <div class="product-info">
+                    {{item}}
+                    <p style="color:black;">Cost: {{item.cost}}</p>
+                </div>
+            
+            </div>
+            {% endfor %}
+            
+        </section>
+
+        <div class= "purchase">
+        <form method="POST" action="">
+            <input type="hidden" name="csrfmiddlewaretoken" value="zk1hegiuYd8b2yNmHdt7dHIUGpU4EcqWAwoy4a9q8yCTb8eb5hE4B31TmcGEE7Nf">
+            <div class= "selectItem">
+                    <label for="id_item" style="font-size: 20px; font-weight: 100;">Item:</label>
+                    <select name="item" required="" id="id_item" style= "height: 3vh; border: 1px solid black;">
+                <option value="" selected="">---------</option>
+                
+                <option value="1">CowboyHat</option>
+                
+                <option value="3">boot</option>
+                
+                <option value="4">Daisy</option>
+                
+                <option value="5">Disco Ball</option>
+                
+                <option value="6">Ghost</option>
+                
+                <option value="7">Orange Smile</option>
+                
+                <option value="8">Purple Smile</option>
+                
+                <option value="9">Red Smile</option>
+                
+                <option value="10">World</option>
+                
+                </select>
+                
+            </div>   
+                  
+                
+            <div class = "buyButton">
+           
+            <input type="submit" value="Buy" style="min-width: 15vw; min-height: 3vh; color: white; border-radius: 70px; background-color: #E98D20;"/>
+            </div>
+        </div>
+        </form>
+        
     </main>
 </div>
 
-<!--<div>
-    <h1>Store</h1>
-</div>
-<div>
-    <p style="color:black;">You have {{userPoints}} positivity points to spend!</p>
-    {% for item in storeItems %}
-    <p style="color:black;">{{item}}</p>
-    {% load static %}
-    <img src="{% static item.image %}" alt="My image">
-    <p style="color:black;">Cost: {{item.cost}}</p>
-    {% endfor %}
-    <form method="POST" action="">
-        {% csrf_token %} {{form.as_p}}
-        <input type="submit" value="Buy" style="color: white; border-radius: 12px; background-color: #E98D20;" />
-    </form>
-
-
-</div>-->
 
 {% endblock content %}
