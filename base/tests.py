@@ -118,3 +118,18 @@ class YourTestClass(TestCase):
         expected = 0
         actual = test1.pointsReceived
         self.assertEqual(actual,expected,"Expected " + str(expected) + " but user had " + str(actual) + " points")
+    def test_store_deny_anonymous(self):
+        response = self.client.get('/store/', follow=True)
+        expected = '/login/?next=%2Fstore%2F'
+        self.assertRedirects(response, expected)
+
+    def test_call_view_load(self):
+       self.user = User.objects.create_user(username='testuser', password='12345')
+       self.client.login(username='testuser', password='12345')
+       test1 = Profile.objects.create(user=self.user)
+       test1.save()
+       response = self.client.get('/store/')
+       self.assertEqual(response.status_code, 200)
+       self.assertTemplateUsed(response, 'base/store.html')
+
+   
