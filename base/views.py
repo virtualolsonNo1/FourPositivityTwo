@@ -203,7 +203,10 @@ def store(request):
                 return redirect('home')
             else:
                 # print error message
-                return 
+                print("error purchase failed")
+                return redirect('home')
+        else:
+            print("Error form is not valid")
     context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userInventory':userItems}
     return render(request, 'base/store.html', context)
 

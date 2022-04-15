@@ -56,14 +56,14 @@ class PurchaseItem(models.Model):
         if profile.pointsReceived < item.cost:
                 error = "Error not enough points!"
                 print("Error not enough points!")
-                return error
+                return False
         profile.pointsReceived = profile.pointsReceived- item.cost
         profile.save()
         item.timesPurchased = item.timesPurchased + 1
         item.save()
         message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
         print(message)
-        return message 
+        return True 
     class Meta:
         ordering = ['-item']
 
