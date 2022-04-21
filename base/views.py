@@ -139,9 +139,9 @@ def updatePoints(senderName,recieverName,pointTotal):
 @login_required(login_url='login')
 def createMessage(request):
     form = MessageForm()
+    validReceivers  = User.objects.filter(~Q(username=request.user.username))
     if request.method == 'POST':
         form = MessageForm(request.POST)
-        validReceivers  = User.objects.filter(~Q(username=request.user.username))
         if form.is_valid():
             obj = form.save(commit = False)
             obj.sender = request.user
