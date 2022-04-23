@@ -48,7 +48,8 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.user)
         
-
+class PublicProfile(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='+')  
 class PurchaseItem(models.Model):
     item = models.ForeignKey(StoreItem, on_delete=models.CASCADE, related_name='+')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')

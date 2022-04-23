@@ -1,7 +1,7 @@
 from tkinter.tix import Form
 from django.forms import EmailField, EmailInput, ModelForm
 from matplotlib import widgets
-from .models import Message, Profile, PurchaseItem
+from .models import Message, Profile, PublicProfile, PurchaseItem
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -31,3 +31,10 @@ class PurchaseForm(ModelForm):
     class Meta:
         model = PurchaseItem
         fields = ['item']
+class ProfileForm(ModelForm):
+    def __init__(self,*args,**kwargs):
+        super (ProfileForm,self ).__init__(*args,**kwargs)
+        self.fields['profile'].queryset = Profile.objects.filter(privacyOn=False)
+    class Meta:
+        model = PublicProfile
+        fields = ['profile']

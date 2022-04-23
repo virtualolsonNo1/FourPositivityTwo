@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, SettingsForm, PurchaseForm
-from .forms import MessageForm
+from .forms import MessageForm,ProfileForm
 from .models import Message
 from .models import Profile
 from .models import StoreItem
@@ -212,11 +212,22 @@ def store(request):
 
 @login_required(login_url='login')
 def profile(request):
+    form = ProfileForm()
     user = request.user
     inventory = PurchaseItem.objects.filter(user=request.user.id)
-    print(inventory)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            otherProf = form.save(commit=False)
+            inventory = PurchaseItem.objects.filter(user=otherProf.profile.user.id)
+            user = otherProf.profile.user
+            print("Returning profile for " + str(user.username))
+            context = {'user': user,'inventory':inventory,'form':form}
+            return render(request, 'base/profile.html', context)
+        else: 
+            print("Form is not valid")
     print(str(inventory))
-    context = {'user': user,'inventory':inventory}
+    context = {'user': user,'inventory':inventory,'form':form}
     return render(request, 'base/profile.html', context)
 
 @login_required(login_url='login')
