@@ -255,3 +255,9 @@ def settings(request):
             return redirect('home')
     context = {'form': form}
     return render(request, 'base/settings.html', context)
+
+def distributePoints():
+    profiles = Profile.objects.all()
+    for profile in profiles:
+        profile.pointsToSend = 100
+        profile.save()

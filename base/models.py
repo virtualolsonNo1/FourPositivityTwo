@@ -41,6 +41,7 @@ class Profile(models.Model):
     pointsReceived = models.IntegerField(default=0)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    lastMessageSent = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-pointsReceived']
