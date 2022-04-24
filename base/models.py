@@ -54,6 +54,8 @@ class PublicProfile(models.Model):
 class PurchaseItem(models.Model):
     item = models.ForeignKey(StoreItem, on_delete=models.CASCADE, related_name='+')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
     def purchase(item,profile):
         if profile.pointsReceived < item.cost:
                 error = "Error not enough points!"
@@ -67,7 +69,7 @@ class PurchaseItem(models.Model):
         print(message)
         return True 
     class Meta:
-        ordering = ['-item']
+        ordering = ['-created']
 
     def __str__(self):
         return str(self.item)

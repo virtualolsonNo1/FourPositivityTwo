@@ -189,8 +189,22 @@ def store(request):
     form = PurchaseForm()
     storeItems = StoreItem.objects.all()
     userItems = PurchaseItem.objects.filter(user=request.user.id)
-    for item in storeItems:
-        print(str(item))
+
+    # populate map of most recently purchased items and who has purchased 
+    itemRecentBuyers = {}
+    
+    # purchased items in order of creation
+    purchasedAll = PurchaseItem.objects.all()
+    for purchased in purchasedAll:
+        if purchased.item in itemRecentBuyers:
+            buyers = itemRecentBuyers[purchased.item]
+            if purchased.user.username not in buyers:
+                buyers.append(purchased.user.username)
+                itemRecentBuyers = buyers
+        else:
+            itemRecentBuyers[purchased.item] = [purchased.user.username]
+        print(itemRecentBuyers[purchased.item])
+        
     currProf = Profile.objects.get(user=request.user.id)
     userPoints = currProf.pointsReceived
     if request.method == 'POST':
@@ -210,7 +224,7 @@ def store(request):
                 return redirect('home')
         else:
             print("Error form is not valid")
-    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userInventory':userItems}
+    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userInventory':userItems,'itemRecentBuyers':itemRecentBuyers}
     return render(request, 'base/store.html', context)
 
 @login_required(login_url='login')
