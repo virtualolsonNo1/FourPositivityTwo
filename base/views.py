@@ -13,6 +13,7 @@ from .models import Message
 from .models import Profile
 from .models import StoreItem
 from .models import PurchaseItem
+from django.core.mail import send_mail
 # 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
 # 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
 # 50 Points: 💎👑💛
@@ -39,6 +40,8 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            print(user.email)
+            send_mail("We've missed you!!!", "You haven't sent a message in over a day", 'bigpapiprogramming@gmail.com', [str(user.email)], fail_silently=False)
             return redirect('home')
         else:
             messages.error(request, 'Username or password does not exist')
