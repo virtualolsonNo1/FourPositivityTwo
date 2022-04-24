@@ -192,18 +192,21 @@ def store(request):
 
     # populate map of most recently purchased items and who has purchased 
     itemRecentBuyers = {}
-    
+
     # purchased items in order of creation
     purchasedAll = PurchaseItem.objects.all()
     for purchased in purchasedAll:
-        if purchased.item in itemRecentBuyers:
-            buyers = itemRecentBuyers[purchased.item]
-            if purchased.user.username not in buyers:
-                buyers.append(purchased.user.username)
-                itemRecentBuyers = buyers
-        else:
-            itemRecentBuyers[purchased.item] = [purchased.user.username]
-        print(itemRecentBuyers[purchased.item])
+        profile = Profile.objects.get(user=purchased.user.id)
+        if profile.privacyOn is False:
+            if purchased.item in itemRecentBuyers:
+                buyers = itemRecentBuyers[purchased.item]
+                if purchased.user.username not in buyers:
+                    buyers.append(purchased.user.username)
+                    itemRecentBuyers = buyers
+            else:
+                itemRecentBuyers[purchased.item] = [purchased.user.username]
+            print(itemRecentBuyers[purchased.item])
+    print(str(itemRecentBuyers))
         
     currProf = Profile.objects.get(user=request.user.id)
     userPoints = currProf.pointsReceived
