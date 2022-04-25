@@ -121,10 +121,17 @@ def updatePoints(senderName,recieverName,pointTotal):
     sender = Profile.objects.get(user=senderName.id)
     reciever = Profile.objects.get(user=recieverName.id)
 
+    # check not sending to themselves
+    if sender.id == reciever.id:
+        error = "Error cannot send message to yourself"
+        print(error)
+        return error
+
     # check sender has enough points
     if reciever.pointsToSend < pointTotal:
-        print("Error not enough sender points!")
-        return False
+        error = "Error not enough sender points!"
+        print(error)
+        return error
 
     # decrement sender points
     print("Sender " + senderName.username + " spent " + str(pointTotal) + " sender points")
@@ -138,11 +145,12 @@ def updatePoints(senderName,recieverName,pointTotal):
     print("Reciever points after " +  str(reciever.pointsReceived))
     sender.save()
     reciever.save()
-    return True
+    return ""
 @login_required(login_url='login')
 def createMessage(request):
     form = MessageForm()
     validReceivers  = User.objects.filter(~Q(username=request.user.username))
+    error = ""
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
@@ -154,13 +162,12 @@ def createMessage(request):
 
             # decrement sender points and increment reciever points
             success = updatePoints(obj.sender,obj.receiver, pointTotal)          
-            if success:
+            if success == "":
                 obj.save()
                 return redirect('home')
-            else:
-                # print error message
-                return 
-    context = {'form': form,'validReceivers':validReceivers}
+            else: 
+                error = success
+    context = {'form': form,'validReceivers':validReceivers,'error':error}
     return render(request, 'base/message_form.html', context)
 
 def purchaseItem(item,profile):
