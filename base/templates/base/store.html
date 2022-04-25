@@ -12,9 +12,12 @@
     .sidebar {
         display: flex;
         min-width: 300px;
+        max-width: 300px;
+        max-height: 675px;
         background-color: #E5E5E5;
         align-items: center;
         flex-direction: column;
+        overflow: scroll;
 
     }
 
@@ -22,6 +25,8 @@
         display: flex;
         flex-grow: 1;
         flex-direction: column;
+        overflow: scroll;
+        max-height: 675px;
         
     }
 
@@ -40,7 +45,6 @@
     
     .content header{
         min-height: 7vh;
-        background-color: yellow;
         font-weight: 100;
         font-size: 2.5vw;
         color: black;
@@ -55,6 +59,11 @@
         flex-wrap: wrap;
         flex-direction: row;
       }
+    .purchaseFrame {
+        display: flex;
+        flex-direction: column;
+        
+      }
 
     .product-card {
         padding: 1%;
@@ -68,6 +77,21 @@
         flex-wrap: wrap;
         flex-direction: column;
         background-color: #FED760;
+        border-radius: 20px;
+
+      }
+      .purchased-card {
+        padding: 1%;
+        margin: 5%;
+        flex-grow: 1;
+        flex-basis: 25%;
+        display: flex;
+        border: 1px solid #E98D20;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        background-color: #E98D20;
         border-radius: 20px;
 
       }
@@ -111,6 +135,22 @@
     <aside class ="sidebar">
         <space></space>
         <heading>Recently<br> Purchased</heading>
+        <section class="purchaseFrame">
+            {% for item in storeItems %}
+            <div class="purchased-card">
+                <div class="product-image">
+                    {% load static %}
+                    <img src="{% static item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
+                </div>
+                <div class="product-info">
+                    {{item}}
+                    <p style="color:black;">Cost: {{item.cost}}</p>
+                </div>
+            
+            </div>
+            {% endfor %}
+            
+        </section>
     </aside>
     <main class = "content">
         <header> {{userPoints}} Positivity Points</header>
