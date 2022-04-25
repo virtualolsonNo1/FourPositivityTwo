@@ -136,18 +136,18 @@
         <space></space>
         <heading>Recently<br> Purchased</heading>
         <section class="purchaseFrame">
-            {% for item in storeItems %}
-            <div class="purchased-card">
-                <div class="product-image">
-                    {% load static %}
-                    <img src="{% static item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
+            {% for item in userItems %}
+                <div class="purchased-card">
+                    <div class="product-image">
+                        {% load static %}
+                        <img src="{% static item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
+                    </div>
+                    <div class="product-info">
+                        {{item}}
+                        <p style="color:black;">Cost: {{item.cost}}</p>
+                    </div>
+                
                 </div>
-                <div class="product-info">
-                    {{item}}
-                    <p style="color:black;">Cost: {{item.cost}}</p>
-                </div>
-            
-            </div>
             {% endfor %}
             
         </section>

@@ -1,5 +1,8 @@
 {% extends 'main.html' %} {% block content %}
 <style>
+    *{
+        margin: 0; border: 0; padding: 0; 
+    }
     .containerSet {
         display: flex;
         flex-direction: column;
@@ -8,6 +11,8 @@
         outline-color: #E98D20;
         outline-width: 5px;
         outline-style: dotted;
+        padding: 20px;
+        margin: 20px;
     }
     
     .itemSet {
@@ -88,7 +93,7 @@
         <div class="itemSet">
             <h2>
                 <label for="id_email">Email:</label>
-                <input type="email" name="email" value="test10@gmail.com" maxlength="254" id="id_email">
+                <input type="email" name="email" value="test10@gmail.com" maxlength="254" id="id_email" style = "width: 150px; padding: 5px;">
             </h2>
         </div>
         <div class="itemSet">
