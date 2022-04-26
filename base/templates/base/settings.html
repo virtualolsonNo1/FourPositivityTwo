@@ -1,8 +1,11 @@
 {% extends 'main.html' %} {% block content %}
 <style>
-    *{
-        margin: 0; border: 0; padding: 0; 
+    * {
+        margin: 0;
+        border: 0;
+        padding: 0;
     }
+    
     .containerSet {
         display: flex;
         flex-direction: column;
@@ -93,7 +96,7 @@
         <div class="itemSet">
             <h2>
                 <label for="id_email">Email:</label>
-                <input type="email" name="email" value="test10@gmail.com" maxlength="254" id="id_email" style = "width: 150px; padding: 5px;">
+                <input type="email" name="email" value="test10@gmail.com" maxlength="254" id="id_email" style="width: 150px; padding: 5px;">
             </h2>
         </div>
         <div class="itemSet">
@@ -118,11 +121,11 @@
         <div class="itemSet">
             <h2>
                 <label for="id_profilePic ">ProfilePic:</label>
-                <input type="file " name="profilePic " accept="image/* " id="id_profilePic ">
+                <input type="file" name="profilePic " accept="image/* " id="id_profilePic ">
             </h2>
         </div>
         <div class="itemSet" style="align-items: center;">
-            <input type="submit " value="Update Settings " style="color: white; border-radius: 12px; background-color: #E98D20; " />
+            <input type="submit" value="Update Settings " style="color: white; border-radius: 12px; background-color: #E98D20; " />
         </div>
 
     </form>
