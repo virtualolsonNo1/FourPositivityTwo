@@ -276,6 +276,10 @@ def settings(request):
     if request.method == 'POST':
         form = SettingsForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
+            form.save(commit=False)
+            test = request.POST['profilePic']
+            profile.profilePic = test
+            form.profilePic = test
             form.save()
             user.email = profile.email
             user.save(update_fields=['email'])

@@ -92,8 +92,8 @@
 <p>{{settings}}</p>
 <div class="containerSet">
     <form method="POST" action="" , enctype="" multipart/form-data>
-        {% csrf_token %}
-        <div class="itemSet">
+        {% csrf_token %} {{form.as_p}}
+        <!-- <div class="itemSet">
             <h2>
                 <label for="id_email">Email:</label>
                 <input type="email" name="email" value="test10@gmail.com" maxlength="254" id="id_email" style="width: 150px; padding: 5px;">
@@ -123,7 +123,7 @@
                 <label for="id_profilePic ">ProfilePic:</label>
                 <input type="file" name="profilePic " accept="image/* " id="id_profilePic ">
             </h2>
-        </div>
+        </div> -->
         <div class="itemSet" style="align-items: center;">
             <input type="submit" value="Update Settings " style="color: white; border-radius: 12px; background-color: #E98D20; " />
         </div>
