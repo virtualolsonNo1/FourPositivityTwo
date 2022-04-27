@@ -1,8 +1,11 @@
 {% extends 'main.html' %} {% block content %}
 <style>
     * {
-        margin: 0; padding: 0; border: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
     }
+    
     .backpack {
         display: flex;
         outline-color: #FED760;
@@ -39,6 +42,7 @@
         {% csrf_token %} {{form.as_p}}
         <input type="submit" value="Send" style="color: white; border-radius: 12px; background-color: #E98D20;" />
     </form>
+    <img src={{user.profile.profilePic}} alt="Girl in a jacket" width="100" height="100">
     <h1 style="text-align:center; color: #ED3E4B; ">{{user.username}}</h1>
     <p style="text-align: center;">{{user.email}}</p>
 

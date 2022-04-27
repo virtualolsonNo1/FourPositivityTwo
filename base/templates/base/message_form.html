@@ -5,31 +5,6 @@
 <div>
     <form method="POST" action="">
         {% csrf_token %} {{form.as_p}}
-
-        <p>
-            <label for="id_receiver">Receiver:</label>
-            <!-- validRecivers -->
-            <select name="receiver" required="" id="id_receiver">
-                <option value="" selected="">---------</option>
-              
-                <option value="1">testing666</option>
-              
-                <option value="2">virtu</option>
-              
-                <option value="6">superuser</option>
-              
-                <option value="8">virtualolson</option>
-              
-                <option value="9">test4</option>
-              
-                <option value="10">test5</option>
-              
-              </select>
-        </p>
-        <p>
-            <label for="id_body">Body:</label>
-            <textarea name="body" cols="40" rows="10" required="" id="id_body"></textarea>
-        </p>
         <input type="submit" value="Send" style="color: white; border-radius: 12px; background-color: #E98D20;" />
     </form>
     <p style="color:red;"> {{error}} </p>
