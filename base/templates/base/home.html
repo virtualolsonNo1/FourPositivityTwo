@@ -161,7 +161,7 @@
         {% endfor %}
     </div>
     <div class="main">
-        <h1>Messages</h1>
+        <h1>Hi {{request.user.username}},<br> here are your messages</h1>
         <h5>{{message_count}} messages available</h5>
 
         <div>
