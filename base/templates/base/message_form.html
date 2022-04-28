@@ -1,5 +1,10 @@
 {% extends 'main.html' %} {% block content %}
 <style>
+    .store-container {
+        display: flex;
+        min-height: calc(100vh - 100px)
+    }
+    
     .sideMF {
         margin: auto;
         background-color: #008F97;
@@ -33,14 +38,14 @@
         flex-wrap: wrap;
     }
 </style>
-<div>
+<!-- <div>
     <h1 style="text-align: center;">Send a Message</h1>
 </div>
 <div class="row">
     <div class="sideMF">
         <div>
             <h3>Copy and paste Emojis to send points to your friends!</h3>
-            <p>10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟<br> 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫<br> 50 Points: 💎👑💛<br>100 Points: 💯 </p>
+            <p style="text-align: left;">10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟<br> 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫<br> 50 Points: 💎👑💛<br>100 Points: 💯 </p>
         </div>
     </div>
     <div class="mainMF">
@@ -51,7 +56,23 @@
         <p style="color:red;"> {{error}} </p>
     </div>
 
-</div>
+</div> -->
+
+<div class="store-container" style="margin: 0;">
+    <aside class="sidebar" style="margin-right: auto; background-color: #e5e1e182; padding: 10px;">
+        <space></space>
+        <h3 style="text-align: center;">Copy and paste Emojis<br>to send points to your friends!</h3>
+        <p style="text-align: left;">10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟<br><br>20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫<br><br> 50 Points: 💎👑💛<br><br>100 Points: 💯 </p>
+
+    </aside>
+    <main class="content" style=" width: 60%;">
+        <h2>Write a Positive Message:</h2>
+        <form method="POST" action="" style="margin: auto;">
+            {% csrf_token %} {{form.as_p}}
+            <input type="submit" value="Send" style="color: white; border-radius: 30px; background-color: #E98D20; height: 40px; width: 100px;" />
+        </form>
+        <p style="color:red;"> {{error}} </p>
+    </main>
 
 
-{% endblock content %}
+    {% endblock content %}
