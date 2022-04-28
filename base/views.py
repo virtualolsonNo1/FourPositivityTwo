@@ -74,7 +74,6 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
-    page = 'Home'
     if(request.user.username is not ''):
         user = User.objects.get(username=request.user.username)
     else:
@@ -101,7 +100,7 @@ def home(request):
         if message.sender not in senders:
             senders.append(message.sender)
 
-    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders,'page': page}
+    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders}
     return render(request, 'base/home.html', context)
 
 def getPoints(message):
