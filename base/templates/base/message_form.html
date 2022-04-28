@@ -1,14 +1,57 @@
 {% extends 'main.html' %} {% block content %}
+<style>
+    .sideMF {
+        margin: auto;
+        background-color: #008F97;
+        /* Grey background color */
+        padding: 20px;
+        /* Some padding */
+        width: 60%;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: antiquewhite;
+        border-radius: 20px 20px 0px 0px;
+    }
+    
+    .mainMF {
+        margin: auto;
+        width: 60%;
+        /* Set the width of the main content */
+        background-color: #008F97;
+        /* White background color */
+        padding: 20px;
+        /* Some padding */
+        align-items: center;
+        text-align: center;
+        color: antiquewhite;
+        border-radius: 0px 0px 20px 20px;
+    }
+    
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>
 <div>
-    <h1>Messages</h1>
+    <h1 style="text-align: center;">Send a Message</h1>
 </div>
-<div>
-    <form method="POST" action="">
-        {% csrf_token %} {{form.as_p}}
-        <input type="submit" value="Send" style="color: white; border-radius: 12px; background-color: #E98D20;" />
-    </form>
-    <p style="color:red;"> {{error}} </p>
-    <p style="color:black;"> Copy and paste Emojis to send points to your friends!<br> 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟<br> 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫<br> 50 Points: 💎👑💛<br>100 Points: 💯 </p>
+<div class="row">
+    <div class="sideMF">
+        <div>
+            <h3>Copy and paste Emojis to send points to your friends!</h3>
+            <p>10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟<br> 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫<br> 50 Points: 💎👑💛<br>100 Points: 💯 </p>
+        </div>
+    </div>
+    <div class="mainMF">
+        <form method="POST" action="">
+            {% csrf_token %} {{form.as_p}}
+            <input type="submit" value="Send" style="color: white; border-radius: 30px; background-color: #E98D20; height: 40px; width: 100px;" />
+        </form>
+        <p style="color:red;"> {{error}} </p>
+    </div>
+
 </div>
+
 
 {% endblock content %}
