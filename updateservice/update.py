@@ -17,7 +17,7 @@ def notifyUsers():
     profiles = Profile.objects.all()
     for profile in profiles:
         seconds_since_last_message = (datetime.now(profile.lastMessageSent.tzinfo) - profile.lastMessageSent).total_seconds()
-        if (seconds_since_last_message >= 86400):
+        if (seconds_since_last_message >= 60 and profile.notificationsOn):
             print("message sent")
             profile.lastMessageSent = datetime.now()
             profile.save()
