@@ -74,6 +74,7 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
+    page = 'Home'
     if(request.user.username is not ''):
         user = User.objects.get(username=request.user.username)
     else:
@@ -100,7 +101,7 @@ def home(request):
         if message.sender not in senders:
             senders.append(message.sender)
 
-    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders}
+    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders,'page': page}
     return render(request, 'base/home.html', context)
 
 def getPoints(message):
@@ -148,6 +149,7 @@ def updatePoints(senderName,recieverName,pointTotal):
     return ""
 @login_required(login_url='login')
 def createMessage(request):
+    page = 'Messages'
     form = MessageForm()
     validReceivers  = User.objects.filter(~Q(username=request.user.username))
     error = ""
@@ -167,7 +169,7 @@ def createMessage(request):
                 return redirect('home')
             else: 
                 error = success
-    context = {'form': form,'validReceivers':validReceivers,'error':error}
+    context = {'form': form,'validReceivers':validReceivers,'error':error, 'page': page}
     return render(request, 'base/message_form.html', context)
 
 def purchaseItem(item,profile):
@@ -193,6 +195,7 @@ def editStoreImage(item,image):
     newItem.save()
 @login_required(login_url='login')
 def store(request):
+    page = "Store"
     form = PurchaseForm()
     storeItems = StoreItem.objects.all()
     userItems = PurchaseItem.objects.filter(user=request.user.id)
@@ -205,14 +208,14 @@ def store(request):
     for purchased in purchasedAll:
         profile = Profile.objects.get(user=purchased.user.id)
         if profile.privacyOn is False:
-            if purchased.item in itemRecentBuyers:
-                buyers = itemRecentBuyers[purchased.item]
+            if purchased.item.id in itemRecentBuyers:
+                buyers = itemRecentBuyers[purchased.item.name]
                 if purchased.user.username not in buyers:
                     buyers.append(purchased.user.username)
-                    itemRecentBuyers = buyers
+                    itemRecentBuyers[purchased.item.id] = buyers
             else:
-                itemRecentBuyers[purchased.item] = [purchased.user.username]
-            print(itemRecentBuyers[purchased.item])
+                itemRecentBuyers[purchased.item.id] = [purchased.user.username]
+            print(itemRecentBuyers[purchased.item.id])
     print(str(itemRecentBuyers))
         
     currProf = Profile.objects.get(user=request.user.id)
@@ -234,11 +237,12 @@ def store(request):
                 return redirect('home')
         else:
             print("Error form is not valid")
-    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userInventory':userItems,'itemRecentBuyers':itemRecentBuyers}
+    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userInventory':userItems,'itemRecentBuyers':itemRecentBuyers, 'page': page}
     return render(request, 'base/store.html', context)
 
 @login_required(login_url='login')
 def profile(request):
+    page = 'Profile'
     form = ProfileForm()
     user = request.user
     inventory = PurchaseItem.objects.filter(user=request.user.id)
@@ -254,18 +258,20 @@ def profile(request):
         else: 
             print("Form is not valid")
     print(str(inventory))
-    context = {'user': user,'inventory':inventory,'form':form}
+    context = {'user': user,'inventory':inventory,'form':form, 'page': page}
     return render(request, 'base/profile.html', context)
 
 @login_required(login_url='login')
 def leaderboard(request):
+    page = 'Leaderboard'
     profiles = Profile.objects.all()
     profiles = profiles[:10]
-    context = {'topSenders': profiles}
+    context = {'topSenders': profiles, 'page': page}
     return render(request, 'base/leaderboard.html', context)
 
 @login_required(login_url='login')
 def settings(request):
+    page = 'Settings'
     user = request.user
     profiles = Profile.objects.all()
     for profile in profiles:
@@ -284,7 +290,7 @@ def settings(request):
             user.email = profile.email
             user.save(update_fields=['email'])
             return redirect('home')
-    context = {'form': form}
+    context = {'form': form, 'page': page}
     return render(request, 'base/settings.html', context)
 
 def distributePoints():

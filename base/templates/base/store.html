@@ -157,17 +157,21 @@
         
         <section class="products">
             {% for item in storeItems %}
-            <div class="product-card">
-                <div class="product-image">
-                    {% load static %}
-                    <img src="{% static item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
+                {% for item1, buyers in itemRecentBuyers.items %}
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        {% load static %}
+                        <img src="{% static item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
+                    </div>
+                    <div class="product-info">
+                        {{item}}
+                        <p style="color:black;">Cost: {{item.cost}}</p>
+                        <p style="color:black;">Recently purchased by: {{buyers}}</p>
+                    </div>
+                
                 </div>
-                <div class="product-info">
-                    {{item}}
-                    <p style="color:black;">Cost: {{item.cost}}</p>
-                </div>
-            
-            </div>
+                {% endfor %}
             {% endfor %}
             
         </section>
