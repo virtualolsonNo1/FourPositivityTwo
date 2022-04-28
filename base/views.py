@@ -23,7 +23,10 @@ EMOJIS = {"😊":10,"👏" : 10, "🤩" : 10,"❤️": 10, "🌈" : 10, "🙌":1
 "🐱":20,"🐸":20,"🌹":20,"🌻":10,"☀️":10,"🍨":20,"🍕":20,"💎":50,"💯":100}
 
 def loginPage(request):
+    # specify page
     page = 'login'
+
+    # if user is already logged in, redirect to home
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -31,6 +34,7 @@ def loginPage(request):
         username = request.POST.get('username').lower()
         password = request.POST.get('password')
 
+        # if user exists, grab them, otherwise, send error that user does not exist
         try:
             user = User.objects.get(username=username)
         except:
@@ -38,10 +42,11 @@ def loginPage(request):
 
         user = authenticate(request, username=username, password=password)
 
+        # if user exists and is authenticated, log them in and redirect them to the home page, otherwise, specify username or
+        # password doesn't exist
         if user is not None:
             login(request, user)
             print(user.email)
-            send_mail("We've missed you!!!", "You haven't sent a message in over a day", 'bigpapiprogramming@gmail.com', [str(user.email)], fail_silently=False)
             return redirect('home')
         else:
             messages.error(request, 'Username or password does not exist')
@@ -55,6 +60,8 @@ def logoutUser(request):
 def registerPage(request):
     form = CreateUserForm()
 
+    # if the request is a post, make sure the registrationform is valid, update the user email if it was changed, 
+    # log the user in, and redirect them to the home page
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -68,25 +75,23 @@ def registerPage(request):
             )
             login(request, user)
             return redirect('home')
+        # otherwise, send error message that an error occurred during registration
         else:
             messages.error(request, 'An error occured during registration')
 
     return render(request, 'base/login_register.html', {'form': form})
 
 def home(request):
+    page = 'Home'
+
+    # if username isn't blank, grab user object, otherwise, render home without user
     if(request.user.username is not ''):
         user = User.objects.get(username=request.user.username)
     else:
         context = {}
         return render(request, 'base/home.html', context)
 
-    profiles = Profile.objects.all()
-    for profile in profiles:
-        if profile.user == request.user:
-            print(profile.pointsToSend)
-
-
-
+    # grab messages send to user and send them to frontend to be displayed, allowing for them to be filtered by sender
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     messages_to = user.receiver.all()
     messages_to = messages_to.filter( 
@@ -96,17 +101,20 @@ def home(request):
 
     unique_senders = user.receiver.all()
     senders = []
+
+    # create list of unique senders to be sent to the frontend so messages can be filtered by sender
     for message in unique_senders:
         if message.sender not in senders:
             senders.append(message.sender)
 
-    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders}
+    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders,'page': page}
     return render(request, 'base/home.html', context)
 
 def getPoints(message):
-    print(message)
     chars = list(message)
     pointTotal = 0
+
+    # iterate through the message's body, totaling the number of points in the message based on emojis
     for char in chars:
         if char in EMOJIS.keys():
             pointTotal += EMOJIS[char]
@@ -172,6 +180,7 @@ def createMessage(request):
     return render(request, 'base/message_form.html', context)
 
 def purchaseItem(item,profile):
+    # if the user doesn't have enough points, send error saying that
     if profile.pointsReceived < item.cost:
         error = "Error not enough points!"
         print("Error not enough points!")
@@ -180,6 +189,7 @@ def purchaseItem(item,profile):
     profile.save()
     item.timesPurchased = item.timesPurchased + 1
     item.save()
+    # otherwise, purchase item, updating the points and times purchased accordingly and sending confirmation message back
     message = "Successfully purchased " + str(item.name) + " for " + str(item.cost)
     print(message)
     return message
@@ -245,6 +255,8 @@ def profile(request):
     form = ProfileForm()
     user = request.user
     inventory = PurchaseItem.objects.filter(user=request.user.id)
+
+    # form to select another profile and call profile url with the other user's information
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():
@@ -265,6 +277,7 @@ def leaderboard(request):
     page = 'Leaderboard'
     profiles = Profile.objects.all()
     profiles = profiles[:10]
+    # after grabbing top 10 senders, send them to the front end to be displayed
     context = {'topSenders': profiles, 'page': page}
     return render(request, 'base/leaderboard.html', context)
 
@@ -277,7 +290,8 @@ def settings(request):
         if profile.user == user:
             profile = Profile.objects.get(user=user)
     form = SettingsForm(instance=profile)
-    # IF USER ADMIN PANEL USED, request won't be post so doesn't work??????
+    
+    # if user tries to update settings, update their settings according to values input and update the user email accordingly
     if request.method == 'POST':
         form = SettingsForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -291,9 +305,3 @@ def settings(request):
             return redirect('home')
     context = {'form': form, 'page': page}
     return render(request, 'base/settings.html', context)
-
-def distributePoints():
-    profiles = Profile.objects.all()
-    for profile in profiles:
-        profile.pointsToSend = 100
-        profile.save()

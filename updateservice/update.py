@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 def updateDailyPoints():
     now = datetime.now(timezone.utcoffset)
     seconds_since_midnight = (now - now.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
+    # if it's within the minutes 0:00, set all users points to send to 100
     if seconds_since_midnight <= 60:
         profiles = Profile.objects.all()
         for profile in profiles:
@@ -15,9 +16,11 @@ def updateDailyPoints():
 
 def notifyUsers():
     profiles = Profile.objects.all()
+    # for every profile, if they haven't sent a message or gotten a notification in a day and have notifications on, send 
+    # them an email saying such
     for profile in profiles:
         seconds_since_last_message = (datetime.now(profile.lastMessageSent.tzinfo) - profile.lastMessageSent).total_seconds()
-        if (seconds_since_last_message >= 60 and profile.notificationsOn):
+        if (seconds_since_last_message >= 86400 and profile.notificationsOn):
             print("message sent")
             profile.lastMessageSent = datetime.now()
             profile.save()
