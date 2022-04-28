@@ -209,10 +209,10 @@ def store(request):
         profile = Profile.objects.get(user=purchased.user.id)
         if profile.privacyOn is False:
             if purchased.item.id in itemRecentBuyers:
-                buyers = itemRecentBuyers[purchased.item.id]
+                buyers = itemRecentBuyers[purchased.item.name]
                 if purchased.user.username not in buyers:
                     buyers.append(purchased.user.username)
-                    itemRecentBuyers = buyers
+                    itemRecentBuyers[purchased.item.id] = buyers
             else:
                 itemRecentBuyers[purchased.item.id] = [purchased.user.username]
             print(itemRecentBuyers[purchased.item.id])
