@@ -156,7 +156,9 @@
         <header> {{userPoints}} Positivity Points</header>
         
         <section class="products">
+
             {% for item in storeItems %}
+            
             <div class="product-card">
                 <div class="product-image">
                     {% load static %}
@@ -165,6 +167,7 @@
                 <div class="product-info">
                     {{item}}
                     <p style="color:black;">Cost: {{item.cost}}</p>
+                    <p style="color:black;">Recently purchased by: {{itemRecentBuyers.1}}</p>
                 </div>
             
             </div>
