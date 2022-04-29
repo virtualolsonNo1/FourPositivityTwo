@@ -571,6 +571,7 @@ class StoreTests(TestCase):
     def test_message_deny_anonymous_leaderboard(self):
             response = self.client.post('/leaderboard/', follow=True)
             expected = '/login/?next=%2Fleaderboard%2F'
+            # redirects to login page if not logged in when click on leaderboard
             self.assertRedirects(response, expected)
 
     def test_leaderboard_correct_top_profile(self):
