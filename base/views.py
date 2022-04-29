@@ -1,3 +1,4 @@
+from turtle import update
 from django.conf import Settings
 from django.dispatch import receiver
 from django.shortcuts import render, redirect
@@ -14,6 +15,7 @@ from .models import Profile
 from .models import StoreItem
 from .models import PurchaseItem
 from django.core.mail import send_mail
+from django.core.files.storage import FileSystemStorage
 # 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
 # 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
 # 50 Points: 💎👑💛
@@ -218,7 +220,7 @@ def store(request):
         profile = Profile.objects.get(user=purchased.user.id)
         if profile.privacyOn is False:
             if purchased.item.id in itemRecentBuyers:
-                buyers = itemRecentBuyers[purchased.item.name]
+                buyers = itemRecentBuyers[purchased.item.id]
                 if purchased.user.username not in buyers:
                     buyers.append(purchased.user.username)
                     itemRecentBuyers[purchased.item.id] = buyers
@@ -285,23 +287,24 @@ def leaderboard(request):
 def settings(request):
     page = 'Settings'
     user = request.user
-    profiles = Profile.objects.all()
-    for profile in profiles:
-        if profile.user == user:
-            profile = Profile.objects.get(user=user)
+    profile = Profile.objects.get(user=request.user.id)
     form = SettingsForm(instance=profile)
-    
     # if user tries to update settings, update their settings according to values input and update the user email accordingly
     if request.method == 'POST':
         form = SettingsForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save(commit=False)
-            test = request.POST['profilePic']
+            test = request.FILES['profilePic']
+
             profile.profilePic = test
             form.profilePic = test
+
             form.save()
             user.email = profile.email
             user.save(update_fields=['email'])
+            url = profile.profilePic.url
+            profile.profilePic = url
+            profile.save()
             return redirect('home')
     context = {'form': form, 'page': page}
     return render(request, 'base/settings.html', context)
