@@ -683,6 +683,49 @@ class StoreTests(TestCase):
 
             self.assertEquals(context[1].user.username, "testuser2", "leaderboard did not work when logged in, whereas it should")
 
+    def test_leaderboard_working_context_top_senders_max_length_ten(self):
+            # add user profile and log in
+            self.user = User.objects.create_user(username='testuser', password='12345')
+            self.client.login(username='testuser', password='12345')
+            user2 =  User.objects.create_user(username='testuser2', password='12345')
+            user3 =  User.objects.create_user(username='testuser3', password='12345')
+            user4 =  User.objects.create_user(username='testuser4', password='12345')
+            user5 =  User.objects.create_user(username='testuser5', password='12345')
+            user6 =  User.objects.create_user(username='testuser6', password='12345')
+            user7 =  User.objects.create_user(username='testuser7', password='12345')
+            user8 =  User.objects.create_user(username='testuser8', password='12345')
+            user9 =  User.objects.create_user(username='testuser9', password='12345')
+            user10 =  User.objects.create_user(username='testuser10', password='12345')
+            user11 =  User.objects.create_user(username='testuser11', password='12345')
+            test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+            test1.save()
+            test2 = Profile.objects.create(user=user2,pointsReceived = 100)
+            test2.save()
+            test3 = Profile.objects.create(user=user3,pointsReceived = 100)
+            test3.save()
+            test4 = Profile.objects.create(user=user4,pointsReceived = 100)
+            test4.save()
+            test5 = Profile.objects.create(user=user5,pointsReceived = 100)
+            test5.save()
+            test6 = Profile.objects.create(user=user6,pointsReceived = 100)
+            test6.save()
+            test7 = Profile.objects.create(user=user7,pointsReceived = 100)
+            test7.save()
+            test8 = Profile.objects.create(user=user8,pointsReceived = 100)
+            test8.save()
+            test9 = Profile.objects.create(user=user9,pointsReceived = 100)
+            test9.save()
+            test10 = Profile.objects.create(user=user10,pointsReceived = 100)
+            test10.save()
+            test11 = Profile.objects.create(user=user11,pointsReceived = 100)
+            test11.save()
+
+            # set response
+            response = self.client.post('/leaderboard/')
+            context = response.context['topSenders']
+
+            self.assertEquals(len(context), 10, "leaderboard did not work when logged in, whereas it should")
+
     def test_leaderboard_working_context_page(self):
             # add user profile and log in
             self.user = User.objects.create_user(username='testuser', password='12345')
