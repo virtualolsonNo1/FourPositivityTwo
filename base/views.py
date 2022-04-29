@@ -287,10 +287,7 @@ def leaderboard(request):
 def settings(request):
     page = 'Settings'
     user = request.user
-    profiles = Profile.objects.all()
-    for profile in profiles:
-        if profile.user == user:
-            profile = Profile.objects.get(user=user)
+    profile = Profile.objects.get(user=request.user.id)
     form = SettingsForm(instance=profile)
     # if user tries to update settings, update their settings according to values input and update the user email accordingly
     if request.method == 'POST':
