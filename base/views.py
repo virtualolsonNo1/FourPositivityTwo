@@ -1,3 +1,4 @@
+from turtle import update
 from django.conf import Settings
 from django.dispatch import receiver
 from django.shortcuts import render, redirect
@@ -291,24 +292,22 @@ def settings(request):
         if profile.user == user:
             profile = Profile.objects.get(user=user)
     form = SettingsForm(instance=profile)
-    
     # if user tries to update settings, update their settings according to values input and update the user email accordingly
     if request.method == 'POST':
         form = SettingsForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save(commit=False)
-            # upload = request.FILES['upload']
-            # fss = FileSystemStorage()
-            # file = fss.save(upload.name, upload)
-            # file_url = fss.url(file)
-            test = request.POST['profilePic']
+            test = request.FILES['profilePic']
+
             profile.profilePic = test
             form.profilePic = test
-            # profile.profilePic = file_url
-            # form.profilePic = file_url
+
             form.save()
             user.email = profile.email
             user.save(update_fields=['email'])
+            url = profile.profilePic.url
+            profile.profilePic = url
+            profile.save()
             return redirect('home')
     context = {'form': form, 'page': page}
     return render(request, 'base/settings.html', context)

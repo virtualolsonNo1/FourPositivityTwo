@@ -33,7 +33,7 @@ class StoreItem(models.Model):
     def __str__(self):
         return self.name 
 class Profile(models.Model):
-    profilePic = models.ImageField(null=True, blank=True,upload_to = "images/",default='/images/StoreAssets/SmileAssetRed.png')
+    profilePic = models.ImageField(null=True, blank=True,default='/images/StoreAssets/SmileAssetRed.png')
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     email = models.EmailField(null=True, blank=True)
     notificationsOn = models.BooleanField(default=True)
