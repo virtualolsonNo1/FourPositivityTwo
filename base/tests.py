@@ -568,7 +568,7 @@ class StoreTests(TestCase):
             expected = '/login/?next=%2Fcreate-message%2F'
             self.assertRedirects(response, expected)
 
-    def test_message_deny_anonymous_leaderboard(self):
+    def test_deny_anonymous_leaderboard(self):
             response = self.client.post('/leaderboard/', follow=True)
             expected = '/login/?next=%2Fleaderboard%2F'
             # redirects to login page if not logged in when click on leaderboard
@@ -584,7 +584,7 @@ class StoreTests(TestCase):
             test2 = Profile.objects.create(user=user2,pointsReceived = 100)
             test2.save()
             # create message
-            message = Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
+            Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
 
             # refresh profiles points
             test1.refresh_from_db()
@@ -747,3 +747,43 @@ class StoreTests(TestCase):
             context = response.context['page']
 
             self.assertEquals(context, "Leaderboard", "leaderboard did not work when logged in, whereas it should")
+
+    def test_deny_anonymous_settings(self):
+            response = self.client.post('/settings/', follow=True)
+            expected = '/login/?next=%2Fsettings%2F'
+            # redirects to login page if not logged in when click on settings
+            self.assertRedirects(response, expected)
+
+    # def test_settings_working_context_page(self):
+    #         # add user profile and log in
+    #         self.user = User.objects.create_user(username='testuser', password='12345')
+    #         self.client.login(username='testuser', password='12345')
+    #         test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+    #         test1.save()
+
+    #         # set response
+    #         response = self.client.post('/settings/', {})
+    #         context = response.context['page']
+
+    #         self.assertEquals(context, "Settings", "settings did not work when logged in, whereas it should")
+
+    # def test_call_view_fail_blank_settings_body_field(self):
+    #         self.user = User.objects.create_user(username='testuser', password='12345')
+    #         self.client.login(username='testuser', password='12345')
+    #         test1 = Profile.objects.create(user=self.user)
+    #         test1.save()
+    #         response = self.client.post('/settings/',{'profilePic': ''})
+    #         self.assertFormError(response, 'form', 'page', 'This field is required.')
+
+    # def test_create_message_form_working_status_code(self):
+    #         self.user = User.objects.create_user(username='testuser', password='12345')
+    #         user2 =  User.objects.create_user(username='testuser2', password='12345')
+    #         login = self.client.login(username='testuser', password='12345')
+
+    #         # create message
+    #         message = Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
+
+    #         # set response
+    #         response = self.client.post(reverse("settings"))
+
+    #         self.assertEquals(response.status_code, 200, "settings did not work when logged in, whereas it should")
