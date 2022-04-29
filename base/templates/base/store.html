@@ -1,4 +1,4 @@
-{% extends 'main.html' %} {% block content %}
+{% extends 'main.html' %}{% block content %}
 <style>
     *{
         margin: 0; border: 0; padding: 0; 
@@ -157,7 +157,6 @@
         
         <section class="products">
             {% for item in storeItems %}
-                {% for item1, buyers in itemRecentBuyers.items %}
                 
                 <div class="product-card">
                     <div class="product-image">
@@ -167,11 +166,11 @@
                     <div class="product-info">
                         {{item}}
                         <p style="color:black;">Cost: {{item.cost}}</p>
-                        <p style="color:black;">Recently purchased by: {{buyers}}</p>
+                        {% load template_filters %}
+                        <p style="color:black;">{{ itemRecentBuyers|get_item:item.id }}</p>
                     </div>
                 
                 </div>
-                {% endfor %}
             {% endfor %}
             
         </section>

@@ -24,5 +24,5 @@ def notifyUsers():
             print("message sent")
             profile.lastMessageSent = datetime.now()
             profile.save()
-            send_mail("We've missed you!!!", "You haven't sent a message in over a day", 'bigpapiprogramming@gmail.com', [str(profile.email)], fail_silently=False)
+            #send_mail("We've missed you!!!", "You haven't sent a message in over a day", 'bigpapiprogramming@gmail.com', [str(profile.email)], fail_silently=False)
             print(profile.email)

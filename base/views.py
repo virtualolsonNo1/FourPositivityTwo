@@ -14,6 +14,7 @@ from .models import Profile
 from .models import StoreItem
 from .models import PurchaseItem
 from django.core.mail import send_mail
+from django.core.files.storage import FileSystemStorage
 # 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
 # 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
 # 50 Points: 💎👑💛
@@ -218,7 +219,7 @@ def store(request):
         profile = Profile.objects.get(user=purchased.user.id)
         if profile.privacyOn is False:
             if purchased.item.id in itemRecentBuyers:
-                buyers = itemRecentBuyers[purchased.item.name]
+                buyers = itemRecentBuyers[purchased.item.id]
                 if purchased.user.username not in buyers:
                     buyers.append(purchased.user.username)
                     itemRecentBuyers[purchased.item.id] = buyers
@@ -296,9 +297,15 @@ def settings(request):
         form = SettingsForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save(commit=False)
+            # upload = request.FILES['upload']
+            # fss = FileSystemStorage()
+            # file = fss.save(upload.name, upload)
+            # file_url = fss.url(file)
             test = request.POST['profilePic']
             profile.profilePic = test
             form.profilePic = test
+            # profile.profilePic = file_url
+            # form.profilePic = file_url
             form.save()
             user.email = profile.email
             user.save(update_fields=['email'])
