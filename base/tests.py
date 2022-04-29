@@ -306,9 +306,9 @@ class StoreTests(TestCase):
             success = updatePoints(self.user,user2, message.pointTotal)  
 
             # set expected
-            expected = True
+            expected = ""
 
-            self.assertEqual(success,expected,"message created successfully")
+            self.assertEquals(success,expected,"message created successfully")
 
     def test_message_creation_correct_body(self):
             self.user = User.objects.create_user(username='testuser', password='12345')
@@ -455,9 +455,10 @@ class StoreTests(TestCase):
 
             # test message was sent as user has enough points to start
             success = updatePoints(self.user, user2, 300)
+            actual = "Error not enough sender points!"
 
-            # set expected
-            self.assertFalse(success, "properly updated points despite the sending user not having enough points to send this message")
+            # check success is false
+            self.assertEquals(success, actual, "properly updated points despite the sending user not having enough points to send this message")
 
     def test_create_message_form_working_status_code(self):
             self.user = User.objects.create_user(username='testuser', password='12345')
@@ -466,9 +467,10 @@ class StoreTests(TestCase):
 
             # create message
             message = Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
+
+            # set response
             response = self.client.post(reverse("create-message"))
 
-            # set expected
             self.assertEquals(response.status_code, 200, "messaging (specifically createMessage) did not work when logged in, whereas it should")
 
     def test_create_message_form_not_working_status_code_not_logged_in(self):
@@ -477,6 +479,7 @@ class StoreTests(TestCase):
 
             # create message
             message = Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
+            # set response
             response = self.client.post(reverse("create-message"))
 
             # set expected
@@ -509,7 +512,7 @@ class StoreTests(TestCase):
             test2.save()
             response = self.client.post('/create-message/', {'receiver': user2.pk, 'body': "Howdy✨✨"})
             test1.refresh_from_db()
-            #verify times purchased was incremented
+            # verify correct updated sender points
             actual = test1.pointsToSend
             expected = 60
             self.assertEqual(actual,expected,"Expected " + str(expected) + " but was " + str(actual))
@@ -525,7 +528,7 @@ class StoreTests(TestCase):
             test2.save()
             response = self.client.post('/create-message/', {'receiver': user2.pk, 'body': "Howdy✨✨"})
             test2.refresh_from_db()
-            #verify times purchased was incremented
+            #verify correct updated receiver points
             actual = test2.pointsReceived
             expected = 140
             self.assertEqual(actual,expected,"Expected " + str(expected) + " but was " + str(actual))
@@ -540,7 +543,7 @@ class StoreTests(TestCase):
             test2.save()
             response = self.client.post('/create-message/', {'receiver': user2.pk, 'body': "Howdy💯"})
             test2.refresh_from_db()
-            #verify times purchased was incremented
+            #verify unchanged receiver points
             actual = test2.pointsReceived
             expected = 100
             self.assertEqual(actual,expected,"Expected " + str(expected) + " but was " + str(actual))
@@ -555,12 +558,43 @@ class StoreTests(TestCase):
             test2.save()
             response = self.client.post('/create-message/', {'receiver': user2.pk, 'body': "Howdy💯"})
             test1.refresh_from_db()
-            #verify times purchased was incremented
+            #verify unchanged sender points
             actual = test1.pointsToSend
             expected = 100
             self.assertEqual(actual,expected,"Expected " + str(expected) + " but was " + str(actual))
 
-    def test_message_deny_anonymous(self):
+    def test_message_deny_anonymous_create_message(self):
             response = self.client.post('/create-message/', follow=True)
             expected = '/login/?next=%2Fcreate-message%2F'
             self.assertRedirects(response, expected)
+
+    def test_message_deny_anonymous_leaderboard(self):
+            response = self.client.post('/leaderboard/', follow=True)
+            expected = '/login/?next=%2Fleaderboard%2F'
+            self.assertRedirects(response, expected)
+
+    def test_leaderboard_correct_top_profile(self):
+           # add user profile and log in
+            self.user = User.objects.create_user(username='testuser', password='12345')
+            self.client.login(username='testuser', password='12345')
+            user2 =  User.objects.create_user(username='testuser2', password='12345')
+            test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+            test1.save()
+            test2 = Profile.objects.create(user=user2,pointsReceived = 100)
+            test2.save()
+            # create message
+            message = Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
+
+            # refresh profiles points
+            test1.refresh_from_db()
+            test2.refresh_from_db()
+
+            # get leaderboard context and top senders
+            response = self.client.get('/leaderboard/')
+            context = response.context
+            topSenders = context['topSenders']
+
+            #verify correct user at the top
+            actual = topSenders[0].user.username
+            expected = str(test1)
+            self.assertEqual(actual,expected,"Expected " + str(expected) + " but was " + str(actual))
