@@ -598,3 +598,42 @@ class StoreTests(TestCase):
             actual = topSenders[0].user.username
             expected = str(test1)
             self.assertEqual(actual,expected,"Expected " + str(expected) + " but was " + str(actual))
+
+    def test_leaderboard_correct_second_profile(self):
+           # add user profile and log in
+            self.user = User.objects.create_user(username='testuser', password='12345')
+            self.client.login(username='testuser', password='12345')
+            user2 =  User.objects.create_user(username='testuser2', password='12345')
+            test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+            test1.save()
+            test2 = Profile.objects.create(user=user2,pointsReceived = 100)
+            test2.save()
+            # create message
+            message = Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
+
+            # refresh profiles points
+            test1.refresh_from_db()
+            test2.refresh_from_db()
+
+            # get leaderboard context and top senders
+            response = self.client.get('/leaderboard/')
+            context = response.context
+            topSenders = context['topSenders']
+
+            #verify correct user at the top
+            actual = topSenders[1].user.username
+            expected = str(test2)
+            self.assertEqual(actual,expected,"Expected " + str(expected) + " but was " + str(actual))
+
+    def test_leaderboard_form_not_working_status_code_not_logged_in(self):
+            # set response
+            response = self.client.post(reverse("leaderboard"))
+
+            # set expected
+            self.assertNotEquals(response.status_code, 200, "leaderboard worked when not logged in, which shouldn't be possible")
+
+    def test_leaderboard_working_status_code(self):
+            # set response
+            response = self.client.post(reverse("leaderboard"))
+
+            self.assertEquals(response.status_code, 302, "leaderboard did not work when logged in, whereas it should")
