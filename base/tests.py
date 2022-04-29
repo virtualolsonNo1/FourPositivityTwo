@@ -638,3 +638,25 @@ class StoreTests(TestCase):
             response = self.client.post(reverse("leaderboard"))
 
             self.assertEquals(response.status_code, 302, "leaderboard did not work when logged in, whereas it should")
+
+    def test_leaderboard_working_context(self):
+            # add user profile and log in
+            self.user = User.objects.create_user(username='testuser', password='12345')
+            self.client.login(username='testuser', password='12345')
+            user2 =  User.objects.create_user(username='testuser2', password='12345')
+            test1 = Profile.objects.create(user=self.user,pointsReceived = 100)
+            test1.save()
+            test2 = Profile.objects.create(user=user2,pointsReceived = 100)
+            test2.save()
+            # create message
+            message = Message.objects.create(sender = self.user, receiver = user2, body = "Howdy✨", pointTotal = 20)
+
+            # refresh profiles points
+            test1.refresh_from_db()
+            test2.refresh_from_db()
+
+            # set response
+            response = self.client.post('/leaderboard/')
+            context = response.context['topSenders']
+
+            self.assertEquals(context[0].user.username, "testuser", "leaderboard did not work when logged in, whereas it should")
