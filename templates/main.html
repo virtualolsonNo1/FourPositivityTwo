@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <style>
-        body{
-            height: 100%;
-        }
-    </style>
+<style>
+    body {
+        height: 100%;
+    }
+</style>
 
 <head>
     <meta charset='utf-8'>
@@ -17,11 +17,11 @@
 <body>
     {% include 'navbar.html' %} {% if messages %}
     <!-- this is the messages stuff -->
-    <!-- <ul class="messages">
+    <ul class="messages">
         {% for message in messages %}
         <li>{{ message }}</li>
         {% endfor %}
-    </ul> -->
+    </ul>
     {% endif %} {% block content %} {% endblock %}
 
 </body>
