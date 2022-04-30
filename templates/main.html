@@ -15,14 +15,7 @@
 </head>
 
 <body>
-    {% include 'navbar.html' %} {% if messages %}
-    <!-- this is the messages stuff -->
-    <ul class="messages">
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %} {% block content %} {% endblock %}
+    {% include 'navbar.html' %} {% if messages %} {% endif %} {% block content %} {% endblock %}
 
 </body>
 
