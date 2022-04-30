@@ -27,7 +27,6 @@
         width: 80%;
         align-items: center;
         justify-content: center;
-        /* padding: 10px; */
     }
     
     .headerL {
@@ -39,6 +38,7 @@
     }
 </style>
 <br><br>
+<!-- leaderboard headings -->
 <div class="containerL">
     <div class="itemL">
         <h2>Rank</h2>
@@ -53,6 +53,7 @@
 </div>
 <br>
 <div class="headerL"></div>
+<!-- for loop to fill leaderboard with users -->
 <div class="containerL">
     {% for profile in topSenders %}
     <div class="itemL">
@@ -64,15 +65,9 @@
     <div class="itemL">
         <h3>{{profile.pointsReceived}}</h3>
     </div>
-    <!-- <div class="contestL"></div> -->
+
     {% endfor %}
 
-
-
-
-    <!-- <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
-        <p style="color:black;">{{topSender}}</p>
-    </div> -->
 </div>
 
 
