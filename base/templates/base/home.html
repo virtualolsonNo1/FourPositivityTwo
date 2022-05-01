@@ -123,7 +123,7 @@
         <h5>{{message_count}} messages available</h5>
 
         <div>
-            {% for message in messages %}
+            {% for message in messages_to %}
             <div>
                 <p>from: {{message.sender.username}}<br>message:{{message.body}}
                     <br>positivity points recieved: {{message.pointTotal}}</p>
@@ -131,7 +131,7 @@
                 <span>@{{message.sender.username}}</span>
                 <h5>{{message.id}} -- <a href="{% url 'message' message.id %}">{{message.body}}
                       <ul class="messages">
-                    {% for message in messages %}
+                    {% for message in messages_to %}
                     <li>{{ message }}</li>
                     {% endfor %}
                 </ul> 
