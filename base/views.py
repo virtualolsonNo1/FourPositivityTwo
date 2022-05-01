@@ -292,7 +292,7 @@ def settings(request):
     form = SettingsForm(instance=profile)
     # if user tries to update settings, update their settings according to values input and update the user email accordingly
     if request.method == 'POST':
-        form = SettingsForm(request.POST, request.FILES, instance=profile)
+        form = SettingsForm(request.POST, request.FILES or None, instance=profile)
         if form.is_valid():
             form.save(commit=False)
             test = request.FILES['profilePic']
