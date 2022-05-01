@@ -74,15 +74,19 @@
 
     .username{
         display: flex;
-        font-size: 20px;
-        align-items: center;
+        font-size: 17px;
+        align-items: left;
+        justify-content: center;
         margin: 20px;
+        flex-direction: column;
     }
     .password{
         display: flex;
-        font-size: 20px;
-        align-items: center;
+        font-size: 17px;
+        align-items: left;
+        justify-content: center;
         margin: 20px;
+        flex-direction: column;
     }
     submit{
         position: fixed;
@@ -128,11 +132,13 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         <div class= "username">
-                            <input type="text" name="username" placeholder="Username" style="width: 250px; padding: 5px;"/>
+                            <label for="username">Username</label>
+                            <input type="text" name="username" placeholder="ex. janeDoe1" style="width: 250px; padding: 5px;"/>
                         </div>
 
                         <div class= "password">
-                            <input type="password" name="password" placeholder="Password" style="width: 250px; padding: 5px;"/>
+                            <label for="username">Password</label>
+                            <input type="password" name="password" style="width: 250px; padding: 5px;"/>
                         </div>
                         <div class= "submitLogin">
                                 <input type="submit" value="Login" style="padding: 5px 50px; width: 250px; background-color: #6EBFB6; color: white; border-radius: 10px; border-color: #6EBFB6"/>
