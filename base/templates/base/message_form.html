@@ -9,11 +9,32 @@
         display: flex;
         flex-wrap: wrap;
     }
+    .rPoints {
+        display: flex;
+        background-image: linear-gradient(to right, #FED760, #E98D20, #ED3E4B);
+        padding: 20px;
+        border-radius: 12px;
+    }
+    .item {
+        flex-grow: 1;
+        height: 100px;
+        color: white;
+    }
+    
+    .item+.item {
+        margin-left: 2%;
+    }
 </style>
 
 <!-- side bar to copy empjis from -->
 <div class="store-container" style="margin: 0;">
     <aside class="sidebar" style="margin-right: auto; background-color: #e5e1e182; padding: 10px;">
+        <div class="rPoints">
+            <div class="item">
+                <h1 style="color: white; text-align: center;">Points to Send: <br>{{request.user.profile.pointsReceived}}</h1>
+            </div>
+
+        </div>
         <space></space>
         <h3 style="text-align: center;">Copy and paste Emojis<br>to send points to your friends!</h3>
         <p style="text-align: left;">10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟<br><br>20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫<br><br> 50 Points: 💎👑💛<br><br>100 Points: 💯 </p>

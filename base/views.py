@@ -158,6 +158,7 @@ def updatePoints(senderName,recieverName,pointTotal):
     return ""
 @login_required(login_url='login')
 def createMessage(request):
+    user = request.user
     page = 'Messages'
     form = MessageForm()
     validReceivers  = User.objects.filter(~Q(username=request.user.username))
@@ -178,7 +179,7 @@ def createMessage(request):
                 return redirect('home')
             else: 
                 error = success
-    context = {'form': form,'validReceivers':validReceivers,'error':error, 'page': page}
+    context = {'form': form,'validReceivers':validReceivers,'error':error, 'page': page, 'user': user}
     return render(request, 'base/message_form.html', context)
 
 def purchaseItem(item,profile):
@@ -248,7 +249,7 @@ def store(request):
                 return redirect('home')
         else:
             print("Error form is not valid")
-    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userInventory':userItems,'itemRecentBuyers':itemRecentBuyers, 'page': page}
+    context = {'storeItems': storeItems,'form':form, 'userPoints':userPoints,'userItems':userItems,'itemRecentBuyers':itemRecentBuyers, 'page': page}
     return render(request, 'base/store.html', context)
 
 @login_required(login_url='login')

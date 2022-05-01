@@ -13,11 +13,12 @@
         display: flex;
         min-width: 300px;
         max-width: 300px;
-        max-height: 675px;
+        max-height: 100vh;
+        overflow: auto;
         background-color: #E5E5E5;
         align-items: center;
         flex-direction: column;
-        overflow: scroll;
+        
 
     }
 
@@ -25,8 +26,10 @@
         display: flex;
         flex-grow: 1;
         flex-direction: column;
-        overflow: scroll;
-        max-height: 675px;
+        max-height: 100vh;
+        overflow: auto;
+       
+        
         
     }
 
@@ -136,15 +139,15 @@
         <space></space>
         <heading>Recently<br> Purchased</heading>
         <section class="purchaseFrame">
-            {% for item in userItems %}
+            {% for purchasedItem in userItems %}
                 <div class="purchased-card">
                     <div class="product-image">
                         {% load static %}
-                        <img src="{% static item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
+                        <img src="{% static purchasedItem.item.image %}" alt="My image" style ="height: 20vh; width: 15vw;">
                     </div>
                     <div class="product-info">
-                        {{item}}
-                        <p style="color:black;">Cost: {{item.cost}}</p>
+                        {{purchasedItem.item}}
+                        <p style="color:black;">Cost: {{purchasedItem.item.cost}}</p>
                     </div>
                 
                 </div>
