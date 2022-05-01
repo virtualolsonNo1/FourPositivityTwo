@@ -293,18 +293,23 @@ def settings(request):
     # if user tries to update settings, update their settings according to values input and update the user email accordingly
     if request.method == 'POST':
         form = SettingsForm(request.POST, request.FILES, instance=profile)
+        newPic = False
         if form.is_valid():
             form.save(commit=False)
-            test = request.FILES['profilePic']
-
+            try:
+                test = request.FILES['profilePic']
+                newPic = True
+            except:
+                test = profile.profilePic
             profile.profilePic = test
             form.profilePic = test
 
             form.save()
             user.email = profile.email
             user.save(update_fields=['email'])
-            url = profile.profilePic.url
-            profile.profilePic = url
+            if newPic is True:
+                url = profile.profilePic.url
+                profile.profilePic = url
             profile.save()
             return redirect('home')
     context = {'form': form, 'page': page}
