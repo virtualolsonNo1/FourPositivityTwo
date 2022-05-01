@@ -90,7 +90,7 @@ def home(request):
     if(request.user.username is not ''):
         user = User.objects.get(username=request.user.username)
     else:
-        context = {}
+        context = {'page': page}
         return render(request, 'base/home.html', context)
 
     # grab messages send to user and send them to frontend to be displayed, allowing for them to be filtered by sender
@@ -109,7 +109,7 @@ def home(request):
         if message.sender not in senders:
             senders.append(message.sender)
 
-    context = {'message_count': message_count, 'messages': messages_to, 'senders': senders,'page': page}
+    context = {'message_count': message_count, 'messages_to': messages_to, 'senders': senders,'page': page}
     return render(request, 'base/home.html', context)
 
 def getPoints(message):
