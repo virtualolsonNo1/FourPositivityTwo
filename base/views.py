@@ -16,6 +16,8 @@ from .models import StoreItem
 from .models import PurchaseItem
 from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
+from datetime import datetime
+import re
 # 10 Points: 😊🤩👏🥰❤️🌈🌹🌻☀️🙌🌟
 # 20 Points:✨🏅💖🍨🍕🎈🐶🐱🐸💫
 # 50 Points: 💎👑💛
@@ -104,12 +106,20 @@ def home(request):
     unique_senders = user.receiver.all()
     senders = []
 
+    now = datetime.now()
+    timeTillMidnight = (now.replace(hour=0, minute=0, second=0, microsecond=0) - now)
+    timeTillMidnight = str(timeTillMidnight)
+    print(timeTillMidnight)
+    match = re.search(r'[0-9]*\:[0-9]*', timeTillMidnight)
+    timeTillMidnight = match.group
+    print(timeTillMidnight)
+
     # create list of unique senders to be sent to the frontend so messages can be filtered by sender
     for message in unique_senders:
         if message.sender not in senders:
             senders.append(message.sender)
 
-    context = {'message_count': message_count, 'messages_to': messages_to, 'senders': senders,'page': page}
+    context = {'message_count': message_count, 'messages_to': messages_to, 'senders': senders,'page': page, 'timeTillMidnight': timeTillMidnight}
     return render(request, 'base/home.html', context)
 
 def getPoints(message):
@@ -138,7 +148,7 @@ def updatePoints(senderName,recieverName,pointTotal):
         return error
 
     # check sender has enough points
-    if reciever.pointsToSend < pointTotal:
+    if sender.pointsToSend < pointTotal:
         error = "Error not enough sender points!"
         print(error)
         return error

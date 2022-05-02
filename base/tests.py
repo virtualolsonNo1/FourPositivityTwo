@@ -1263,9 +1263,27 @@ class SettingsTests(TestCase):
 
             # set response
             response = self.client.get('/settings/')
-            actual = response.context['page']
+            actual =     response.context['page']
             expected = 'Settings'
-            self.assertEqual(actual,expected,"Page was not as expected")         
+            self.assertEqual(actual,expected,"Page was not as expected")    
+    def test_settings_update_email(self):
+            # add user profile and log in
+            self.user = User.objects.create_user(username='testuser', password='12345')
+            self.client.login(username='testuser', password='12345')
+            test1 = Profile.objects.create(user=self.user,pointsReceived = 100,email="test@gmail.com")
+            test1.save()
+                
+            with open('base\static\media\earth-clipart-earth.png', 'rb') as f:
+                data = {
+                    "profilePic": f,
+                    "email":"test2@gmail.com"
+                    }
+
+                # set response
+                self.client.post('/settings/', data=data)
+                self.user.refresh_from_db()
+                self.assertEquals('test2@gmail.com', self.user.email)
+     
 
     # def test_call_view_fail_blank_settings_body_field(self):
     #         self.user = User.objects.create_user(username='testuser', password='12345')
