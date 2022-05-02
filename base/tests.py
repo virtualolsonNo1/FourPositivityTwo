@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from .models import Profile, StoreItem, PurchaseItem, Message
 from .views import updatePoints, getPoints
+from datetime import datetime
+import datetime as dt
+from updateservice.update import notifyUsers, updateDailyPoints, notifyUsers
 # Create your tests here.
 
 
@@ -1283,13 +1286,128 @@ class SettingsTests(TestCase):
                 self.client.post('/settings/', data=data)
                 self.user.refresh_from_db()
                 self.assertEquals('test2@gmail.com', self.user.email)
-     
 
-    # def test_call_view_fail_blank_settings_body_field(self):
-    #         self.user = User.objects.create_user(username='testuser', password='12345')
-    #         self.client.login(username='testuser', password='12345')
-    #         test1 = Profile.objects.create(user=self.user)
-    #         test1.save()
-    #         response = self.client.post('/settings/',{'profilePic': ''})
-    #         self.assertFormError(response, 'form', 'page', 'This field is required.')
+class UpdateServiceTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        print("Do all setup")
 
+    def setUp(self):
+        print("setUp: Run once for every test method to setup clean data.")
+        pass
+    
+    def test_update_points_at_midnight(self):
+        self.user = User.objects.create_user(
+        username='testuser', password='12345')
+        user2 = User.objects.create_user(
+            username='testuser2', password='12345')
+        user2.save()
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile
+        test1 = Profile.objects.create(user=self.user, pointsReceived=100)
+        test1.save()
+        test2 = Profile.objects.create(user=user2)
+        test2.save()
+
+        # create message
+        message = Message.objects.create(
+            sender=self.user, receiver=user2, body="Howdy✨", pointTotal=20)
+
+        # test message was sent as user has enough points to start
+        pointTotal = getPoints(message.body)
+        updatePoints(self.user, user2, pointTotal)
+
+        updateDailyPoints(datetime.now().replace(hour=0, minute=0, second=0, microsecond=0))
+        test1.refresh_from_db()
+        actual = test1.pointsToSend
+
+        # set expected
+        expected = 100
+
+        self.assertEqual(actual, expected,
+                        "correct number of points allotted to all users")
+
+    def test_dont_update_points_not_midnight(self):
+        self.user = User.objects.create_user(
+        username='testuser', password='12345')
+        user2 = User.objects.create_user(
+            username='testuser2', password='12345')
+        user2.save()
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile
+        test1 = Profile.objects.create(user=self.user, pointsReceived=100)
+        test1.save()
+        test2 = Profile.objects.create(user=user2)
+        test2.save()
+
+        # create message
+        message = Message.objects.create(
+            sender=self.user, receiver=user2, body="Howdy✨", pointTotal=20)
+
+        # test message was sent as user has enough points to start
+        pointTotal = getPoints(message.body)
+        updatePoints(self.user, user2, pointTotal)
+
+        updateDailyPoints(datetime.now().replace(hour=0, minute=2, second=0, microsecond=0))
+        test1.refresh_from_db()
+        actual = test1.pointsToSend
+
+        # set expected
+        expected = 80
+
+        self.assertEqual(actual, expected,
+                        "correct number of points allotted to all users when not updated since it isn't midnight")
+
+    def test_notify_user(self):
+        self.user = User.objects.create_user(
+        username='testuser', password='12345')
+        user2 = User.objects.create_user(
+            username='testuser2', password='12345')
+        user2.save()
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile
+        test1 = Profile.objects.create(user=self.user, pointsReceived=100)
+        test1.save()
+        test2 = Profile.objects.create(user=user2)
+        test2.save()
+
+        # test message was sent as user has enough points to start
+        test1.lastMessageSent = datetime(2022, 4, 30, 4, 5, 6)
+        test1.save()
+        test1.refresh_from_db()
+        actual = notifyUsers()
+
+        # set expected
+        expected = True
+
+        self.assertEqual(actual, expected,
+                        "didn't send notification despite no message or notification having been sent in past 24 hours")
+
+    def test_dont_notify_user(self):
+        self.user = User.objects.create_user(
+        username='testuser', password='12345')
+        user2 = User.objects.create_user(
+            username='testuser2', password='12345')
+        user2.save()
+        login = self.client.login(username='testuser', password='12345')
+
+        # create profile
+        test1 = Profile.objects.create(user=self.user, pointsReceived=100)
+        test1.save()
+        test2 = Profile.objects.create(user=user2)
+        test2.save()
+
+        # test message was sent as user has enough points to start
+        test1.lastMessageSent = datetime(2022, 5, 2, 4, 5, 6)
+        test1.save()
+        test1.refresh_from_db()
+        actual = notifyUsers()
+
+        # set expected
+        expected = False
+
+        self.assertEqual(actual, expected,
+                        "sent notification despite message or notification being sent in the past 24 hours")
