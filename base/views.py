@@ -288,7 +288,7 @@ def profile(request):
 @login_required(login_url='login')
 def leaderboard(request):
     page = 'Leaderboard'
-    profiles = Profile.objects.all()
+    profiles = Profile.objects.filter(privacyOn=False)
     profiles = profiles[:10]
     # after grabbing top 10 senders, send them to the front end to be displayed
     context = {'topSenders': profiles, 'page': page}
